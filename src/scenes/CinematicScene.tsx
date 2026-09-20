@@ -61,14 +61,14 @@ export const CinematicScene: React.FC<CinematicSceneProps> = ({
     camTarget.current.lookAt.copy(stage.target);
   }, [activeSection]);
 
-  // Adaptive particle count: 300 on mobile/low-end, 900 on desktop
+  // Adaptive particle count: 200 mobile, 350 low-end desktop, 700 high-end desktop
   const particleCount = useMemo(() => {
     if (typeof window !== 'undefined') {
       const isMobile = window.innerWidth < 768;
       const isLowEnd = navigator.hardwareConcurrency != null && navigator.hardwareConcurrency <= 4;
-      return isMobile || isLowEnd ? 300 : 900;
+      return isMobile ? 200 : isLowEnd ? 350 : 700;
     }
-    return 900;
+    return 700;
   }, []);
 
   const [positions, colors, velocities] = useMemo(() => {
@@ -107,22 +107,27 @@ export const CinematicScene: React.FC<CinematicSceneProps> = ({
 
   const emberGeoRef = useRef<THREE.BufferGeometry>(null);
 
-  // Per-Frame Animation Loop
+// Reusable vectors to prevent GC allocations on every frame
+const tempVecTarget = new THREE.Vector3();
+const tempVecLookAt = new THREE.Vector3();
+
+// Per-Frame Animation Loop
   useFrame((state, delta) => {
+    if (typeof document !== 'undefined' && document.hidden) return;
+
     const t = state.clock.elapsedTime;
     const lerpFactor = 1 - Math.pow(0.012, delta);
 
-    // ── 1. Camera Inertial Interpolation + Parallax ──
-    const targetWithParallax = camTarget.current.pos.clone();
-    targetWithParallax.x += mouse.current.x * 0.38;
-    targetWithParallax.y += mouse.current.y * 0.28;
+    // ── 1. Camera Inertial Interpolation + Parallax (Zero-Allocation) ──
+    tempVecTarget.copy(camTarget.current.pos);
+    tempVecTarget.x += mouse.current.x * 0.38;
+    tempVecTarget.y += mouse.current.y * 0.28;
+    camera.position.lerp(tempVecTarget, lerpFactor * 0.6);
 
-    camera.position.lerp(targetWithParallax, lerpFactor * 0.6);
-
-    const lookAtWithParallax = camTarget.current.lookAt.clone();
-    lookAtWithParallax.x += mouse.current.x * 0.16;
-    lookAtWithParallax.y += mouse.current.y * 0.12;
-    camera.lookAt(lookAtWithParallax);
+    tempVecLookAt.copy(camTarget.current.lookAt);
+    tempVecLookAt.x += mouse.current.x * 0.16;
+    tempVecLookAt.y += mouse.current.y * 0.12;
+    camera.lookAt(tempVecLookAt);
 
     // ── 2. Red Point Light follows mouse cursor ──
     if (lightRef.current) {
@@ -130,16 +135,17 @@ export const CinematicScene: React.FC<CinematicSceneProps> = ({
       lightRef.current.position.y = mouse.current.y * 3.5;
     }
 
-    // ── 3. Rising Ember Physics ──
+    // ── 3. Rising Ember Physics (Fast Direct Buffer Mutation) ──
     if (emberGeoRef.current) {
       const posAttr = emberGeoRef.current.attributes.position as THREE.BufferAttribute;
+      const arr = posAttr.array as Float32Array;
       for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
-        posAttr.setY(i, posAttr.getY(i) + velocities[i3 + 1]);
-        posAttr.setX(i, posAttr.getX(i) + Math.sin(t * 0.9 + i) * 0.0035);
+        arr[i3 + 1] += velocities[i3 + 1];
+        arr[i3] += Math.sin(t * 0.9 + i) * 0.0035;
 
-        if (posAttr.getY(i) > 9) {
-          posAttr.setY(i, -9);
+        if (arr[i3 + 1] > 9) {
+          arr[i3 + 1] = -9;
         }
       }
       posAttr.needsUpdate = true;

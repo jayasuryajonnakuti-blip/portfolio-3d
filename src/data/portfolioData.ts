@@ -20,7 +20,7 @@ export const profileData: Profile = {
   status: "Available for Full Stack & AI Opportunities",
   avatarUrl: "assets/jaya-surya.jpg",
   badge: "JAVA • AI & DATA SCIENCE",
-  cgpa: "7.62",
+  cgpa: "8.88",
   certificationsCount: "7+",
   internshipsCount: "2",
   githubUrl: "https://github.com/jayasuryajonnakuti-blip",

@@ -25,7 +25,7 @@ import {
 } from './sections';
 
 export function App() {
-  const { progress, activeSection } = useScrollProgress();
+  const { activeSection } = useScrollProgress();
   useSpotlightEffect();
   useScrollReveal();
 
@@ -65,8 +65,8 @@ export function App() {
 
   return (
     <div className="portfolio-root">
-      {/* Cinematic Scroll Progress Bar — thin red strip at page top */}
-      <ScrollProgressBar progress={progress} />
+      {/* Cinematic Scroll Progress Bar — updates directly on scroll */}
+      <ScrollProgressBar />
 
       {/* Desktop Cinematic Custom Cursor */}
       <CustomCursor />
@@ -76,7 +76,7 @@ export function App() {
       <div className="film-grain-overlay" aria-hidden="true" />
 
       {/* 3D WebGL Background Canvas Layer */}
-      <SceneManager scrollProgress={progress} activeSection={activeSection} />
+      <SceneManager activeSection={activeSection} scrollProgress={0} />
 
       {/* Main Interactive Portfolio Content */}
       <div className="content-wrapper">

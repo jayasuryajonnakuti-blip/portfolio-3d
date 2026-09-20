@@ -1,18 +1,41 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface ScrollProgressBarProps {
-  progress: number; // 0–1
+  progress?: number; // Optional fallback
 }
 
 /**
- * Thin cinematic red scroll progress bar that sits at the very top of the
- * viewport (above the navbar). Shows how far the user has scrolled.
+ * High-performance cinematic red scroll progress bar that updates via
+ * direct DOM transform without triggering React re-renders.
  */
-export const ScrollProgressBar: React.FC<ScrollProgressBarProps> = ({ progress }) => {
+export const ScrollProgressBar: React.FC<ScrollProgressBarProps> = () => {
+  const barRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+          if (barRef.current) {
+            barRef.current.style.width = `${Math.min(pct, 100)}%`;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <div
+      ref={barRef}
       className="scroll-progress-bar"
-      style={{ width: `${Math.min(progress * 100, 100)}%` }}
       aria-hidden="true"
     />
   );

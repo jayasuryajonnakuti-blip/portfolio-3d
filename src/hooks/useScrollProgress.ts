@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export interface ScrollInfo {
   progress: number;
@@ -19,12 +19,9 @@ const SECTION_IDS = [
   'finale',
 ];
 
-export function useScrollProgress(): ScrollInfo {
-  const [scrollInfo, setScrollInfo] = useState<ScrollInfo>({
-    progress: 0,
-    scrollY: 0,
-    activeSection: 'home',
-  });
+export function useScrollProgress(): { activeSection: string } {
+  const [activeSection, setActiveSection] = useState<string>('home');
+  const activeSectionRef = useRef<string>('home');
 
   useEffect(() => {
     let ticking = false;
@@ -36,9 +33,12 @@ export function useScrollProgress(): ScrollInfo {
           const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
           const progress = maxScroll > 0 ? Math.min(Math.max(currentY / maxScroll, 0), 1) : 0;
 
+          // Update CSS variable directly without triggering React re-renders!
+          document.documentElement.style.setProperty('--scroll-progress', `${progress}`);
+
           // Detect active section
           let currentSection = 'home';
-          const scrollPosWithOffset = currentY + 160;
+          const scrollPosWithOffset = currentY + 220;
 
           for (const id of SECTION_IDS) {
             const el = document.getElementById(id);
@@ -51,11 +51,11 @@ export function useScrollProgress(): ScrollInfo {
             }
           }
 
-          setScrollInfo({
-            progress,
-            scrollY: currentY,
-            activeSection: currentSection,
-          });
+          // ONLY trigger React re-render when the active section genuinely changes!
+          if (activeSectionRef.current !== currentSection) {
+            activeSectionRef.current = currentSection;
+            setActiveSection(currentSection);
+          }
 
           ticking = false;
         });
@@ -70,5 +70,5 @@ export function useScrollProgress(): ScrollInfo {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  return scrollInfo;
+  return { activeSection };
 }
