@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code, Globe, Database, Cpu, Wrench, Layers } from 'lucide-react';
+import { Code, Globe, Database, Cpu, Wrench, Layers, ExternalLink } from 'lucide-react';
 import { skillCategoriesData } from '../data';
 
 export const SkillsSection: React.FC = () => {
@@ -31,7 +31,7 @@ export const SkillsSection: React.FC = () => {
             Engineering <span className="text-gradient-red">Toolkit & Skills</span>
           </h2>
           <p className="section-desc">
-            Technical competencies and programming languages practiced across full stack web applications, AI research projects, and verified industry credentials.
+            Interactive technology universe. Click any technology to explore its official ecosystem, developer documentation, or authoritative architecture hub.
           </p>
         </div>
 
@@ -53,9 +53,18 @@ export const SkillsSection: React.FC = () => {
               </div>
               <div className="skill-badges-container">
                 {cat.skills.map((skill) => (
-                  <span key={skill} className="skill-item">
-                    {skill}
-                  </span>
+                  <a
+                    key={skill.name}
+                    href={skill.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="skill-item skill-interactive-link"
+                    aria-label={`Explore official documentation and ecosystem for ${skill.name} (opens in a new tab)`}
+                    title={`${skill.name} — ${skill.isOfficial ? 'Official Technology Ecosystem' : 'Authoritative Architecture Reference'}`}
+                  >
+                    <span>{skill.name}</span>
+                    <ExternalLink size={12} className="skill-link-icon" aria-hidden="true" />
+                  </a>
                 ))}
               </div>
             </div>

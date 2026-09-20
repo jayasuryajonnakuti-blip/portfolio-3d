@@ -16,12 +16,18 @@ export interface Profile {
   resumeUrl: string;
 }
 
+export interface SkillItem {
+  name: string;
+  url: string;
+  isOfficial?: boolean;
+}
+
 export interface SkillCategory {
   id: string;
   title: string;
   subtitle: string;
   icon: string;
-  skills: string[];
+  skills: SkillItem[];
   fullWidth?: boolean;
 }
 
