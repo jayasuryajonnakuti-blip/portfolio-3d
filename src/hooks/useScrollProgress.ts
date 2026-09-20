@@ -16,6 +16,7 @@ const SECTION_IDS = [
   'certificates',
   'documents',
   'contact',
+  'finale',
 ];
 
 export function useScrollProgress(): ScrollInfo {

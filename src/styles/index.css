@@ -1292,3 +1292,238 @@ section {
     display: block;
   }
 }
+
+/* ==========================================================================
+   CINEMATIC CUSTOM CURSOR (DESKTOP)
+   ========================================================================== */
+.cinematic-cursor-dot {
+  position: fixed;
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red-bright);
+  box-shadow: 0 0 10px var(--red-bright);
+  pointer-events: none;
+  z-index: 10000;
+  will-change: transform;
+}
+
+.cinematic-cursor-ring {
+  position: fixed;
+  top: -18px;
+  left: -18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 26, 26, 0.45);
+  box-shadow: 0 0 15px rgba(255, 26, 26, 0.2);
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.cinematic-cursor-ring.hovered {
+  border-color: var(--red-bright);
+  background: rgba(255, 26, 26, 0.08);
+  box-shadow: 0 0 25px rgba(255, 26, 26, 0.45);
+}
+
+/* ==========================================================================
+   PROLOGUE (CHAPTER 01)
+   ========================================================================== */
+.prologue-overlay {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px;
+  overflow: hidden;
+}
+
+.prologue-distant-glow {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 9, 20, 0.18) 0%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.prologue-distant-glow.active {
+  opacity: 1;
+}
+
+.prologue-center-content {
+  position: relative;
+  z-index: 5;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.prologue-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.2em;
+  color: var(--red-bright);
+  background: rgba(255, 26, 26, 0.08);
+  border: 1px solid rgba(255, 26, 26, 0.3);
+  padding: 6px 18px;
+  border-radius: var(--radius-full);
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 1s ease;
+}
+
+.prologue-tag.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.prologue-headline-wrap {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 20px;
+}
+
+.prologue-headline-wrap.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.prologue-title {
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.prologue-sub-wrap {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 1s ease;
+  margin-bottom: 36px;
+}
+
+.prologue-sub-wrap.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.prologue-role {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--red-bright);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.prologue-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.prologue-enter-wrap {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 1s ease;
+}
+
+.prologue-enter-wrap.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.prologue-scroll-cue {
+  margin-top: 14px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   FINAL SHOT (PULL-BACK FINALE)
+   ========================================================================== */
+.final-shot-section {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  padding: 100px 24px;
+}
+
+.final-shot-horizon {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1000px;
+  height: 250px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(229, 9, 20, 0.18) 0%, transparent 70%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+.final-shot-name {
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.final-shot-title {
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--red-bright);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.final-shot-motto {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin-inline: auto;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .pulse-dot, .forensic-laser-line, .profile-glow-ring {
+    animation: none !important;
+  }
+}
+

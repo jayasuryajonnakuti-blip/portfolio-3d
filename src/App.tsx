@@ -1,7 +1,16 @@
 import { useState, useCallback } from 'react';
 import { useScrollProgress, useSpotlightEffect, useScrollReveal } from './hooks';
 import { SceneManager } from './scenes';
-import { Navbar, Footer, CertModal, Toast, ModalData } from './components';
+import {
+  Navbar,
+  Footer,
+  CertModal,
+  Toast,
+  ModalData,
+  CustomCursor,
+  Prologue,
+  FinalShot,
+} from './components';
 import {
   HeroSection,
   AboutSection,
@@ -46,9 +55,19 @@ export function App() {
       });
   }, []);
 
+  const handleEnterWorld = useCallback(() => {
+    const heroEl = document.getElementById('home');
+    if (heroEl) {
+      heroEl.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
   return (
     <div className="portfolio-root">
-      {/* Cinematic Overlays: Vignette & Subtle Film Grain */}
+      {/* Desktop Cinematic Custom Cursor */}
+      <CustomCursor />
+
+      {/* Atmospheric Overlays: Vignette & Subtle Film Grain */}
       <div className="vignette-overlay" aria-hidden="true" />
       <div className="film-grain-overlay" aria-hidden="true" />
 
@@ -60,15 +79,38 @@ export function App() {
         <Navbar activeSection={activeSection} />
 
         <main>
+          {/* Chapter 01 — Prologue */}
+          <Prologue onEnterWorld={handleEnterWorld} />
+
+          {/* Chapter 02 — Hero */}
           <HeroSection />
+
+          {/* Chapter 03 — About */}
           <AboutSection />
+
+          {/* Chapter 04 — Skills */}
           <SkillsSection />
+
+          {/* Chapter 05 — Experience & Education */}
           <ExperienceSection onOpenModal={handleOpenModal} />
+
+          {/* Chapter 06 — Project Universe */}
           <ProjectsSection onOpenModal={handleOpenModal} />
+
+          {/* Chapter 07 — TruthLens AI (Main Showcase) */}
           <TruthLensSection onOpenModal={handleOpenModal} />
+
+          {/* Chapter 08 — Certificates Vault */}
           <CertificatesSection onOpenModal={handleOpenModal} />
+
+          {/* Chapter 09 — Documents */}
           <DocumentsSection />
+
+          {/* Chapter 10 — Contact */}
           <ContactSection onCopyEmail={handleCopyEmail} />
+
+          {/* Final Shot — Cinematic Pull-Back */}
+          <FinalShot />
         </main>
 
         <Footer />
