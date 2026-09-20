@@ -70,8 +70,8 @@ export function useScrollReveal() {
         }
       });
 
-      // 4. Featured Project Card
-      const featuredCard = document.querySelector('.featured-project-card');
+      // 4. Featured Project / TruthLens Forensic Card
+      const featuredCard = document.querySelector('.featured-project-card, .forensic-panel');
       if (featuredCard) {
         gsap.fromTo(
           featuredCard,

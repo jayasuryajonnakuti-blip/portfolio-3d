@@ -8,6 +8,7 @@ import {
   SkillsSection,
   ExperienceSection,
   ProjectsSection,
+  TruthLensSection,
   CertificatesSection,
   DocumentsSection,
   ContactSection,
@@ -47,7 +48,11 @@ export function App() {
 
   return (
     <div className="portfolio-root">
-      {/* 3D Background Canvas Layer */}
+      {/* Cinematic Overlays: Vignette & Subtle Film Grain */}
+      <div className="vignette-overlay" aria-hidden="true" />
+      <div className="film-grain-overlay" aria-hidden="true" />
+
+      {/* 3D WebGL Background Canvas Layer */}
       <SceneManager scrollProgress={progress} activeSection={activeSection} />
 
       {/* Main Interactive Portfolio Content */}
@@ -60,6 +65,7 @@ export function App() {
           <SkillsSection />
           <ExperienceSection onOpenModal={handleOpenModal} />
           <ProjectsSection onOpenModal={handleOpenModal} />
+          <TruthLensSection onOpenModal={handleOpenModal} />
           <CertificatesSection onOpenModal={handleOpenModal} />
           <DocumentsSection />
           <ContactSection onCopyEmail={handleCopyEmail} />

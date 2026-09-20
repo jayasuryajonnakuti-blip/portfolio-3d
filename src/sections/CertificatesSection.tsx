@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, Eye } from 'lucide-react';
+import { Award, Eye, ExternalLink, ShieldCheck } from 'lucide-react';
 import { certificateOrgsData } from '../data';
 import { ModalData } from '../components';
 import { getAssetUrl } from '../utils';
@@ -13,12 +13,15 @@ export const CertificatesSection: React.FC<CertificatesSectionProps> = ({ onOpen
     <section id="certificates">
       <div className="container">
         <div className="section-header">
-          <div className="section-tag">05 / VERIFIED CREDENTIALS</div>
+          <div className="section-tag">
+            <Award size={14} />
+            <span>06 / VERIFIED CREDENTIALS</span>
+          </div>
           <h2 className="section-title">
-            Credentials <span className="text-gradient">& Certifications</span>
+            Industry <span className="text-gradient-red">Certifications</span>
           </h2>
           <p className="section-desc">
-            Structured by issuing organization. Click on any credential to view the high-resolution certificate or inspect the official PDF document.
+            Official verified certifications in Agentic AI, Data Structures & Algorithms, Java, and Software Engineering from Oracle, Scaler, TCS iON, and MongoDB.
           </p>
         </div>
 
@@ -29,8 +32,8 @@ export const CertificatesSection: React.FC<CertificatesSectionProps> = ({ onOpen
                 <div className="cert-org-brand">
                   <div className="org-icon-avatar">{org.shortCode}</div>
                   <div>
-                    <h3 className="cert-org-name">{org.name}</h3>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>{org.name}</h3>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
                       {org.issuerSubtitle}
                     </span>
                   </div>
@@ -41,13 +44,17 @@ export const CertificatesSection: React.FC<CertificatesSectionProps> = ({ onOpen
               <div className="cert-items-stack">
                 {org.items.map((item) => (
                   <div key={item.id} className="cert-single-item">
-                    <h4 className="cert-item-title">{item.title}</h4>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <ShieldCheck size={16} color="#FF1A1A" />
+                      <h4 className="cert-item-title">{item.title}</h4>
+                    </div>
+
                     <div className="cert-item-meta">
-                      <span>📅 {item.date}</span>
+                      <span>DATE: {item.date}</span>
                       {item.expiry && (
                         <>
                           <span>•</span>
-                          <span>⏳ {item.expiry}</span>
+                          <span style={{ color: 'var(--red-bright)' }}>EXPIRY: {item.expiry}</span>
                         </>
                       )}
                       {item.subtitle && (
@@ -57,6 +64,7 @@ export const CertificatesSection: React.FC<CertificatesSectionProps> = ({ onOpen
                         </>
                       )}
                     </div>
+
                     <div className="cert-item-actions">
                       <button
                         type="button"
@@ -70,7 +78,7 @@ export const CertificatesSection: React.FC<CertificatesSectionProps> = ({ onOpen
                         }
                       >
                         <Eye size={14} />
-                        <span>View Certificate</span>
+                        <span>Inspect Certificate</span>
                       </button>
                       <a
                         href={getAssetUrl(item.pdfSrc)}
@@ -79,7 +87,7 @@ export const CertificatesSection: React.FC<CertificatesSectionProps> = ({ onOpen
                         className="btn-cert-action"
                       >
                         <ExternalLink size={14} />
-                        <span>Open PDF</span>
+                        <span>Official PDF</span>
                       </a>
                     </div>
                   </div>

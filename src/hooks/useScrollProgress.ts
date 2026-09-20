@@ -12,6 +12,7 @@ const SECTION_IDS = [
   'skills',
   'experience',
   'projects',
+  'truthlens',
   'certificates',
   'documents',
   'contact',
@@ -36,7 +37,7 @@ export function useScrollProgress(): ScrollInfo {
 
           // Detect active section
           let currentSection = 'home';
-          const scrollPosWithOffset = currentY + 140;
+          const scrollPosWithOffset = currentY + 160;
 
           for (const id of SECTION_IDS) {
             const el = document.getElementById(id);

@@ -1,162 +1,103 @@
 import React from 'react';
-import { ArrowUpRight, FileText } from 'lucide-react';
+import { ArrowUpRight, FolderGit2, Sparkles } from 'lucide-react';
 import { projectsData } from '../data';
 import { ModalData, GithubIcon } from '../components';
-import { getAssetUrl } from '../utils';
 
 interface ProjectsSectionProps {
   onOpenModal: (data: ModalData) => void;
 }
 
-export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ onOpenModal }) => {
-  const featuredProject = projectsData.find((p) => p.featured);
+export const ProjectsSection: React.FC<ProjectsSectionProps> = () => {
   const secondaryProjects = projectsData.filter((p) => !p.featured);
 
   return (
     <section id="projects">
       <div className="container">
         <div className="section-header">
-          <div className="section-tag">04 / PORTFOLIO HIGHLIGHT</div>
+          <div className="section-tag">
+            <FolderGit2 size={14} />
+            <span>04 / PROJECT UNIVERSE</span>
+          </div>
           <h2 className="section-title">
-            Featured <span className="text-gradient">Projects</span>
+            Engineered <span className="text-gradient-red">Systems & Architecture</span>
           </h2>
           <p className="section-desc">
-            Practical software engineered with advanced AI capabilities, full-stack architectures, and rigorous design documentation.
+            Production-grade full stack applications and academic systems engineered with modular architectures, database normalization, and AI vision capabilities.
           </p>
         </div>
 
-        {/* Featured Project: TruthLens AI */}
-        {featuredProject && (
-          <article className="featured-project-card spotlight-card">
-            <div className="featured-badge-top">
-              <span>★ {featuredProject.tag}</span>
+        {/* Highlight Banner pointing to next section */}
+        <div
+          className="spotlight-card"
+          style={{
+            marginBottom: '36px',
+            border: '1px dashed rgba(255, 26, 26, 0.4)',
+            background: 'linear-gradient(90deg, rgba(229, 9, 20, 0.08) 0%, rgba(13, 13, 13, 0.8) 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '16px',
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--red-bright)', fontSize: '0.82rem', fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>
+              <Sparkles size={14} />
+              <span>HEADLINE MULTIMODAL SYSTEM</span>
             </div>
-
-            <div className="project-hero-grid">
-              <div className="project-info">
-                <h3>{featuredProject.title}</h3>
-                <p className="project-desc-long">{featuredProject.description}</p>
-
-                {featuredProject.features && (
-                  <div className="project-feature-list">
-                    {featuredProject.features.map((feat, idx) => (
-                      <div key={idx} className="project-feature-item">
-                        <span style={{ color: 'var(--emerald-400)' }}>✓</span>
-                        <span>{feat}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <div className="tech-stack-chips" style={{ marginBottom: '26px' }}>
-                  {featuredProject.technologies.map((tech) => (
-                    <span key={tech} className="tech-pill">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="btn-group">
-                  {featuredProject.liveUrl && (
-                    <a
-                      href={featuredProject.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-primary"
-                    >
-                      <span>Live Demo</span>
-                      <ArrowUpRight size={16} />
-                    </a>
-                  )}
-                  {featuredProject.reportUrl && (
-                    <a
-                      href={getAssetUrl(featuredProject.reportUrl)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-secondary"
-                    >
-                      <FileText size={16} />
-                      <span>TruthLens Full Report (49 pgs)</span>
-                    </a>
-                  )}
-                  {featuredProject.githubUrl && (
-                    <a
-                      href={featuredProject.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-secondary"
-                    >
-                      <GithubIcon size={16} />
-                      <span>GitHub Repository</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              {/* Screenshots Gallery */}
-              {featuredProject.screenshots && (
-                <div>
-                  <div className="screenshots-mosaic">
-                    {featuredProject.screenshots.map((s, idx) => (
-                      <div
-                        key={idx}
-                        className={`screenshot-thumb-wrapper ${s.featured ? 'featured-span-2' : ''}`}
-                        onClick={() =>
-                          onOpenModal({
-                            imageSrc: s.thumbnail,
-                            title: s.title,
-                            pdfSrc: featuredProject.reportUrl,
-                          })
-                        }
-                      >
-                        <img src={getAssetUrl(s.thumbnail)} alt={s.title} />
-                        <div className="screenshot-overlay">
-                          <span className="view-zoom-badge">{s.badge}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', textAlign: 'center', marginTop: '10px' }}>
-                    Screenshots extracted directly from TruthLens AI application. Click to enlarge.
-                  </p>
-                </div>
-              )}
-            </div>
-          </article>
-        )}
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>
+              TruthLens AI — Deepfake & Media Authentication
+            </h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              Jump to the dedicated forensic laboratory section below to explore the full Gemini API pipeline.
+            </p>
+          </div>
+          <a href="#truthlens" className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '0.84rem' }}>
+            <span>Enter AI Forensics Lab</span>
+            <ArrowUpRight size={16} />
+          </a>
+        </div>
 
         {/* Secondary Academic Projects */}
-        {secondaryProjects.map((p) => (
-          <article key={p.id} className="secondary-project-card spotlight-card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '12px' }}>
-              <div>
-                <span className="section-tag" style={{ marginBottom: '8px' }}>{p.tag}</span>
-                <h3 style={{ fontSize: '1.35rem', fontWeight: 700 }}>{p.title}</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+          {secondaryProjects.map((p) => (
+            <article key={p.id} className="secondary-project-card spotlight-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+                <div>
+                  <span className="section-tag" style={{ marginBottom: '8px', fontSize: '0.7rem', padding: '3px 10px' }}>
+                    {p.tag}
+                  </span>
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 800 }}>{p.title}</h3>
+                </div>
               </div>
-              <div className="tech-stack-chips">
+
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.94rem', lineHeight: 1.7, marginBottom: '22px' }}>
+                {p.description}
+              </p>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
                 {p.technologies.map((t) => (
-                  <span key={t} className="tech-pill">{t}</span>
+                  <span key={t} className="skill-item" style={{ fontSize: '0.78rem' }}>
+                    {t}
+                  </span>
                 ))}
               </div>
-            </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: 1.7, marginBottom: '18px' }}>
-              {p.description}
-            </p>
-            {p.githubUrl && (
-              <div className="btn-group">
+
+              {p.githubUrl && (
                 <a
                   href={p.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-secondary btn-sm"
+                  className="btn btn-secondary"
+                  style={{ padding: '8px 18px', fontSize: '0.84rem' }}
                 >
                   <GithubIcon size={15} />
-                  <span>View on GitHub</span>
+                  <span>Inspect Source on GitHub</span>
                 </a>
-              </div>
-            )}
-          </article>
-        ))}
+              )}
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, MessageSquare } from 'lucide-react';
 import { contactData } from '../data';
 import { GithubIcon, LinkedinIcon } from '../components';
 
@@ -13,13 +13,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCopyEmail }) =
       <div className="container">
         <div className="contact-card-wrapper spotlight-card">
           <div className="section-tag" style={{ marginInline: 'auto' }}>
-            07 / LET'S TALK
+            <MessageSquare size={14} />
+            <span>08 / CINEMATIC FINALE</span>
           </div>
-          <h2 className="section-title">
-            Ready to Build <span className="text-gradient">Something Exceptional?</span>
+
+          <h2 className="section-title" style={{ fontSize: 'clamp(2.4rem, 5vw, 4.2rem)' }}>
+            LET'S BUILD
+            <br />
+            <span className="text-gradient-red">SOMETHING GREAT.</span>
           </h2>
-          <p className="section-desc" style={{ maxWidth: '600px', marginInline: 'auto' }}>
-            I am actively looking for software engineering roles, Java Full Stack developer positions, and AI/Data Science internships. Feel free to reach out directly!
+
+          <p className="section-desc" style={{ maxWidth: '620px', marginInline: 'auto' }}>
+            I am actively seeking software engineering roles, Java Full Stack developer positions, and AI/Data Science internships. Let's connect and build dependable systems together.
           </p>
 
           <div className="contact-channels-grid">
@@ -42,7 +47,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCopyEmail }) =
               <div className="contact-channel-icon">
                 <Phone size={22} />
               </div>
-              <div className="contact-channel-label">Phone</div>
+              <div className="contact-channel-label">Direct Phone</div>
               <div className="contact-channel-val">{contactData.phone}</div>
             </a>
 
@@ -51,7 +56,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCopyEmail }) =
               <div className="contact-channel-icon">
                 <MapPin size={22} />
               </div>
-              <div className="contact-channel-label">Location</div>
+              <div className="contact-channel-label">Current Base</div>
               <div className="contact-channel-val">{contactData.location}</div>
             </div>
           </div>
@@ -59,7 +64,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCopyEmail }) =
           <div className="btn-group" style={{ justifyContent: 'center' }}>
             <a href={`mailto:${contactData.email}`} className="btn btn-primary">
               <Send size={17} />
-              <span>Send Direct Email</span>
+              <span>Send Direct Message</span>
             </a>
             <a
               href={contactData.linkedinUrl}
@@ -77,7 +82,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCopyEmail }) =
               className="btn btn-secondary"
             >
               <GithubIcon size={18} />
-              <span>Explore GitHub</span>
+              <span>View GitHub Code</span>
             </a>
           </div>
         </div>

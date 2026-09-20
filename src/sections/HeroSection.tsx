@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, FileText } from 'lucide-react';
+import { ArrowUpRight, FileText, Sparkles } from 'lucide-react';
 import { profileData } from '../data';
 import { getAssetUrl } from '../utils';
 import { GithubIcon, LinkedinIcon } from '../components';
@@ -8,30 +8,31 @@ export const HeroSection: React.FC = () => {
   return (
     <section id="home" className="hero">
       <div className="container hero-grid">
-        {/* Left: Developer Identity */}
+        {/* Left: Developer Identity with Dramatic Typography */}
         <div className="hero-content">
           <div className="status-pill">
-            <span className="pulse-dot"></span>
+            <span className="pulse-dot" />
             <span>{profileData.status}</span>
           </div>
 
           <h1 className="hero-title">
-            Hi, I'm <span className="text-gradient">{profileData.firstName}</span>
+            JONNAKUTI
             <br />
-            {profileData.lastName}
+            <span className="text-gradient-red">JAYA SURYA</span>
           </h1>
 
           <div className="hero-subtitle">
-            {profileData.role} • {profileData.specialization}
+            AI & DATA SCIENCE • FULL STACK DEVELOPER
           </div>
 
           <p className="hero-bio">
-            B.Tech student in <strong>Artificial Intelligence & Data Science</strong> with hands-on internship experience in Java Full Stack development, scalable software architecture, and creator of <strong>TruthLens AI</strong>.
+            B.Tech in <strong>Artificial Intelligence & Data Science</strong> at Dhanalakshmi Srinivasan University. Experienced in Java Full Stack development, scalable web architectures, and creator of the <strong>TruthLens AI</strong> synthetic media forensics system.
           </p>
 
           <div className="btn-group">
-            <a href="#projects" className="btn btn-primary">
-              <span>View Projects</span>
+            <a href="#truthlens" className="btn btn-primary">
+              <Sparkles size={17} />
+              <span>Explore TruthLens AI</span>
               <ArrowUpRight size={17} />
             </a>
             <a
@@ -41,7 +42,7 @@ export const HeroSection: React.FC = () => {
               className="btn btn-secondary"
             >
               <FileText size={17} />
-              <span>Download Resume</span>
+              <span>Download Official Resume</span>
             </a>
             <a
               href={profileData.githubUrl}
@@ -63,26 +64,27 @@ export const HeroSection: React.FC = () => {
             </a>
           </div>
 
+          {/* Academic & Professional Metas */}
           <div className="hero-stats-row">
             <div className="hero-stat-item">
-              <div className="hero-stat-val text-gradient">{profileData.cgpa}</div>
+              <div className="hero-stat-val text-gradient-red">{profileData.cgpa}</div>
               <div className="hero-stat-label">B.Tech AI & DS CGPA</div>
             </div>
             <div className="hero-stat-item">
-              <div className="hero-stat-val text-gradient">{profileData.certificationsCount}</div>
+              <div className="hero-stat-val text-gradient-red">{profileData.certificationsCount}</div>
               <div className="hero-stat-label">Verified Certifications</div>
             </div>
             <div className="hero-stat-item">
-              <div className="hero-stat-val text-gradient">{profileData.internshipsCount}</div>
+              <div className="hero-stat-val text-gradient-red">{profileData.internshipsCount}</div>
               <div className="hero-stat-label">Industry Internships</div>
             </div>
           </div>
         </div>
 
-        {/* Right: Premium Developer Profile Card */}
+        {/* Right: Spatial 3D Profile Card with Red Rim Lighting */}
         <div className="hero-profile-card spotlight-card">
           <div className="profile-frame-wrap">
-            <div className="profile-glow-ring"></div>
+            <div className="profile-glow-ring" />
             <div className="profile-image-container">
               <img
                 src={getAssetUrl(profileData.avatarUrl)}
@@ -96,9 +98,9 @@ export const HeroSection: React.FC = () => {
           </div>
 
           <div className="profile-details-area">
-            <div className="status-pill" style={{ marginInline: 'auto', marginBottom: '12px' }}>
-              <span className="pulse-dot"></span>
-              <span>Open to Opportunities</span>
+            <div className="status-pill" style={{ marginInline: 'auto', marginBottom: '14px' }}>
+              <span className="pulse-dot" />
+              <span>OPPORTUNITIES: OPEN</span>
             </div>
             <h3 className="profile-name">{profileData.name}</h3>
             <div className="profile-title">{profileData.role}</div>

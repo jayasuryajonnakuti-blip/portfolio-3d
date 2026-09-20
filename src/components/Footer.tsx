@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowUp, Mail } from 'lucide-react';
-import { profileData } from '../data';
+import { profileData, contactData } from '../data';
 import { GithubIcon, LinkedinIcon } from './Icons';
 
 export const Footer: React.FC = () => {
@@ -9,16 +9,24 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="site-footer">
-      <div className="container footer-content">
+    <footer className="footer-wrap">
+      <div className="container footer-inner">
         <div>
-          <p>© {new Date().getFullYear()} {profileData.name}. All rights reserved.</p>
-          <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginTop: '4px' }}>
-            Built with React, TypeScript, Three.js, and GSAP.
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <span className="brand-monogram" style={{ width: '26px', height: '26px', fontSize: '0.78rem' }}>JS</span>
+            <span style={{ fontWeight: 800, fontSize: '0.92rem', letterSpacing: '0.06em' }}>
+              {profileData.name.toUpperCase()}
+            </span>
+          </div>
+          <p className="footer-copy">
+            © {new Date().getFullYear()} Jonnakuti Jaya Surya. All rights reserved.
+          </p>
+          <p style={{ fontSize: '0.74rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', marginTop: '4px' }}>
+            ENGINEERED WITH REACT, TYPESCRIPT, THREE.JS & GSAP
           </p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <a
             href={profileData.githubUrl}
             target="_blank"
@@ -38,7 +46,7 @@ export const Footer: React.FC = () => {
             <LinkedinIcon size={18} />
           </a>
           <a
-            href={`mailto:${profileData.name.toLowerCase().replace(/\s+/g, '')}@gmail.com`}
+            href={`mailto:${contactData.email}`}
             className="btn-icon"
             aria-label="Email"
           >

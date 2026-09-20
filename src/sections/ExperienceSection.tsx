@@ -1,6 +1,8 @@
 import React from 'react';
+import { Briefcase, Eye, ExternalLink } from 'lucide-react';
 import { experienceData } from '../data';
 import { ModalData } from '../components';
+import { getAssetUrl } from '../utils';
 
 interface ExperienceSectionProps {
   onOpenModal: (data: ModalData) => void;
@@ -11,61 +13,80 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ onOpenModa
     <section id="experience">
       <div className="container">
         <div className="section-header">
-          <div className="section-tag">03 / CAREER JOURNEY</div>
+          <div className="section-tag">
+            <Briefcase size={14} />
+            <span>03 / CAREER MILESTONES</span>
+          </div>
           <h2 className="section-title">
-            Professional <span className="text-gradient">Experience</span>
+            Industry <span className="text-gradient-red">Experience</span>
           </h2>
           <p className="section-desc">
-            Hands-on internships delivering full-stack Java solutions, problem-solving, and software engineering practices.
+            Hands-on professional developer internships contributing to enterprise Java architectures, object-oriented design, and production workflows.
           </p>
         </div>
 
         <div className="timeline-container">
+          {/* Glowing Red Timeline Rail */}
+          <div className="timeline-rail" />
+
           {experienceData.map((exp) => (
-            <div key={exp.id} className="timeline-card spotlight-card">
-              <div className="timeline-header">
-                <div>
-                  <h3 className="timeline-role">{exp.role}</h3>
-                  <div className="timeline-company">{exp.company}</div>
-                </div>
-                <div className="timeline-date">{exp.period}</div>
-              </div>
+            <div key={exp.id} className="timeline-entry">
+              <div className="timeline-orb" />
 
-              <p className="timeline-desc">{exp.description}</p>
+              <div className="spotlight-card" style={{ padding: '32px' }}>
+                <div className="timeline-period-badge">{exp.period}</div>
+                <h3 className="timeline-role">{exp.role}</h3>
+                <div className="timeline-company">{exp.company}</div>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '18px', fontSize: '0.96rem' }}>
+                  {exp.description}
+                </p>
 
-              <ul className="timeline-bullets">
-                {exp.bullets.map((bullet, idx) => (
-                  <li key={idx}>{bullet}</li>
-                ))}
-              </ul>
+                <ul className="timeline-bullets">
+                  {exp.bullets.map((b, idx) => (
+                    <li key={idx}>{b}</li>
+                  ))}
+                </ul>
 
-              {exp.certificates && exp.certificates.length > 0 && (
-                <div className="btn-group" style={{ marginTop: '16px' }}>
-                  {exp.certificates.map((cert, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      className="btn btn-secondary btn-sm"
-                      onClick={() =>
-                        onOpenModal({
-                          imageSrc: cert.imageSrc,
-                          title: cert.title,
-                          pdfSrc: cert.pdfSrc,
-                        })
-                      }
-                    >
-                      {cert.label}
-                    </button>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '22px' }}>
+                  {exp.skills.map((s) => (
+                    <span key={s} className="skill-item" style={{ fontSize: '0.78rem' }}>
+                      {s}
+                    </span>
                   ))}
                 </div>
-              )}
 
-              <div className="timeline-skills-tags">
-                {exp.skills.map((skill) => (
-                  <span key={skill} className="timeline-tag">
-                    {skill}
-                  </span>
-                ))}
+                {/* Verified Internship Certificate & LOR preview buttons */}
+                {exp.certificates && exp.certificates.length > 0 && (
+                  <div className="timeline-certs-group">
+                    {exp.certificates.map((c, cIdx) => (
+                      <div key={cIdx} style={{ display: 'flex', gap: '8px' }}>
+                        <button
+                          type="button"
+                          className="btn-cert-action"
+                          onClick={() =>
+                            onOpenModal({
+                              imageSrc: c.imageSrc,
+                              title: c.title,
+                              pdfSrc: c.pdfSrc,
+                            })
+                          }
+                        >
+                          <Eye size={14} />
+                          <span>{c.label}</span>
+                        </button>
+                        <a
+                          href={getAssetUrl(c.pdfSrc)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-cert-action"
+                        >
+                          <ExternalLink size={14} />
+                          <span>PDF</span>
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}
