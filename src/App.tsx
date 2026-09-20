@@ -8,7 +8,6 @@ import {
   Toast,
   ModalData,
   CustomCursor,
-  Prologue,
   FinalShot,
   ScrollProgressBar,
 } from './components';
@@ -56,13 +55,6 @@ export function App() {
       });
   }, []);
 
-  const handleEnterWorld = useCallback(() => {
-    const heroEl = document.getElementById('home');
-    if (heroEl) {
-      heroEl.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, []);
-
   return (
     <div className="portfolio-root">
       {/* Cinematic Scroll Progress Bar — updates directly on scroll */}
@@ -83,10 +75,7 @@ export function App() {
         <Navbar activeSection={activeSection} />
 
         <main>
-          {/* Chapter 01 — Prologue */}
-          <Prologue onEnterWorld={handleEnterWorld} />
-
-          {/* Chapter 02 — Hero */}
+          {/* Chapter 01 — Hero */}
           <HeroSection />
 
           {/* Chapter 03 — About */}
