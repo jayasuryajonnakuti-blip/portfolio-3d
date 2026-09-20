@@ -4,11 +4,6 @@ import {
   ArrowUpRight,
   Play,
   Plus,
-  Brain,
-  Code,
-  Layers,
-  Award,
-  GraduationCap,
   Mail,
   FileText,
   Globe,
@@ -29,7 +24,7 @@ export const HeroSection: React.FC = () => {
           <div className="hero-identity-col">
             <div className="hero-greeting-tag">
               <span className="hud-code-prefix">//</span>
-              <span className="hud-code-text">HUMAN + AI + CREATIVITY</span>
+              <span className="hud-code-text">HELLO, WORLD!</span>
             </div>
 
             <h1 className="hero-monumental-heading">
@@ -55,7 +50,7 @@ export const HeroSection: React.FC = () => {
 
               <a href="#truthlens" className="hud-btn-secondary">
                 <Play size={13} className="play-triangle-icon" />
-                <span>VIEW TRUTHLENS AI</span>
+                <span>WATCH SHOWREEL</span>
               </a>
             </div>
 
@@ -73,131 +68,57 @@ export const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Center Column: Spatial 3D Cosmic Core with Floating Badges */}
+          {/* Center Column: Transparent — 3D canvas shows through + Floating Badges */}
           <div className="hero-spatial-center">
-            {/* Background Cosmic Core Sphere Graphic */}
-            <div className="cosmic-core-preview-wrapper" aria-hidden="true">
-              <img
-                src={getAssetUrl('assets/cosmic-core.jpg')}
-                alt="Cosmic Core"
-                className="cosmic-core-img"
-              />
-              <div className="cosmic-core-glow-ring" />
-            </div>
 
-            {/* Floating Telemetry Labels (Left & Right) */}
-            <div className="spatial-telemetry-side left" aria-hidden="true">
-              <span>BUILD</span>
-              <span>LEARN</span>
-              <span>CREATE</span>
-              <span>IMPACT</span>
-            </div>
-
-            <div className="spatial-telemetry-side right" aria-hidden="true">
-              <span>IDEAS</span>
-              <span>INTO</span>
-              <span>REALITY</span>
-            </div>
-
-            {/* Floating HUD Callout Badges with Connecting Lines */}
+            {/* Floating HUD Callout Badges */}
             <div className="spatial-floating-badge badge-top-left">
-              <span className="badge-bracket">[</span>
               <span className="badge-text">CREATIVE THINKER</span>
               <Plus size={11} className="badge-plus-icon" />
-              <span className="badge-bracket">]</span>
             </div>
 
             <div className="spatial-floating-badge badge-top-right">
-              <span className="badge-bracket">[</span>
               <Plus size={11} className="badge-plus-icon" />
               <span className="badge-text">PROBLEM SOLVER</span>
-              <span className="badge-bracket">]</span>
-            </div>
-
-            <div className="spatial-floating-badge badge-mid-right">
-              <span className="badge-bracket">[</span>
-              <Plus size={11} className="badge-plus-icon" />
-              <span className="badge-text">AI BUILDER</span>
-              <span className="badge-bracket">]</span>
             </div>
 
             <div className="spatial-floating-badge badge-bottom-right">
-              <span className="badge-bracket">[</span>
               <Plus size={11} className="badge-plus-icon" />
               <span className="badge-text">CONTINUOUS LEARNER</span>
-              <span className="badge-bracket">]</span>
             </div>
           </div>
 
-          {/* Right Column: Precision HUD Stat Column (Exact Reference) */}
+          {/* Right Column: Numeric Stats (Exact Reference) */}
           <div className="hero-stats-hud-col">
             {/* Quote Banner */}
             <div className="hero-quote-box">
               <div className="hero-quote-content">
-                &ldquo;TECHNOLOGY IS A TOOL.
+                &ldquo;TECHNOLOGY IS A{' '}
+                <strong>TOOL.</strong>
                 <br />
-                IMPACT IS A CHOICE.&rdquo;
+                IMPACT IS A <strong>CHOICE.</strong>&rdquo;
               </div>
               <div className="hero-quote-author">— JAYA SURYA</div>
             </div>
 
-            {/* Vertical Readout Nodes with Red Wireframe Icons */}
-            <div className="hero-readout-stack">
-              <div className="hero-readout-node">
-                <div className="readout-icon-box">
-                  <Brain size={18} className="readout-hud-icon" />
-                </div>
-                <div className="readout-text-box">
-                  <div className="readout-primary-val">AI & DATA SCIENCE</div>
-                  <div className="readout-secondary-tag">FOCUS AREA</div>
-                </div>
+            {/* Numeric Stat Stack */}
+            <div className="hero-numeric-stats">
+              <div className="hero-stat-row">
+                <div className="stat-big-number">100<span className="stat-plus">+</span></div>
+                <div className="stat-label">HOURS OF LEARNING</div>
               </div>
-
-              <div className="hero-readout-node">
-                <div className="readout-icon-box">
-                  <Code size={18} className="readout-hud-icon" />
-                </div>
-                <div className="readout-text-box">
-                  <div className="readout-primary-val">FULL STACK</div>
-                  <div className="readout-secondary-tag">DEVELOPMENT</div>
-                </div>
+              <div className="hero-stat-row">
+                <div className="stat-big-number">10<span className="stat-plus">+</span></div>
+                <div className="stat-label">TECHNOLOGIES</div>
               </div>
-
-              <div className="hero-readout-node">
-                <div className="readout-icon-box">
-                  <Layers size={18} className="readout-hud-icon" />
-                </div>
-                <div className="readout-text-box">
-                  <div className="readout-primary-val">TRUTHLENS AI</div>
-                  <div className="readout-secondary-tag">FLAGSHIP PROJECT</div>
-                </div>
+              <div className="hero-stat-row">
+                <div className="stat-big-number">3<span className="stat-plus">+</span></div>
+                <div className="stat-label">MAJOR PROJECTS</div>
               </div>
-
-              <div className="hero-readout-node">
-                <div className="readout-icon-box">
-                  <Award size={18} className="readout-hud-icon" />
-                </div>
-                <div className="readout-text-box">
-                  <div className="readout-primary-val">ORACLE CERTIFIED</div>
-                  <div className="readout-secondary-tag">PROFESSIONAL</div>
-                </div>
+              <div className="hero-stat-row">
+                <div className="stat-big-number">∞</div>
+                <div className="stat-label">BIGGER DREAMS</div>
               </div>
-
-              <div className="hero-readout-node">
-                <div className="readout-icon-box">
-                  <GraduationCap size={18} className="readout-hud-icon" />
-                </div>
-                <div className="readout-text-box">
-                  <div className="readout-primary-val">B.TECH</div>
-                  <div className="readout-secondary-tag">AI & DATA SCIENCE</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Tag */}
-            <div className="hero-readout-footnote">
-              <span className="footnote-label">DRIVEN BY</span>
-              <span className="footnote-highlight">BIGGER DREAMS</span>
             </div>
           </div>
         </div>
@@ -335,7 +256,7 @@ export const HeroSection: React.FC = () => {
           <div className="continuation-inner-content">
             {/* Top Motto Row */}
             <div className="continuation-top-motto">
-              <span>FROM IDEAS TODAY</span>
+              <span>FROM INDIA</span>
               <span className="motto-arrow">➔</span>
               <span>TO A MORE INTELLIGENT TOMORROW</span>
             </div>
