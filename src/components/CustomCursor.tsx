@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 export const CustomCursor: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const hoveredRef = useRef(false);
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorRingRef = useRef<HTMLDivElement>(null);
 
@@ -31,9 +32,12 @@ export const CustomCursor: React.FC = () => {
       const target = e.target as HTMLElement | null;
       if (target) {
         const isInteractive = Boolean(
-          target.closest('a, button, input, textarea, select, .btn, .spotlight-card, .screenshot-thumb-wrapper, .cert-single-item, .skill-item')
+          target.closest('a, button, input, textarea, select, .btn, .spotlight-card, .screenshot-thumb-wrapper, .cert-single-item, .skill-item, .contact-channel-item')
         );
-        setHovered(isInteractive);
+        if (hoveredRef.current !== isInteractive) {
+          hoveredRef.current = isInteractive;
+          setHovered(isInteractive);
+        }
       }
     };
 
@@ -42,11 +46,11 @@ export const CustomCursor: React.FC = () => {
 
     // Smooth lerp for outer ring
     const render = () => {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
+      ringX += (mouseX - ringX) * 0.2;
+      ringY += (mouseY - ringY) * 0.2;
 
       if (cursorRingRef.current) {
-        cursorRingRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) scale(${hovered ? 1.5 : 1})`;
+        cursorRingRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) scale(${hoveredRef.current ? 1.5 : 1})`;
       }
 
       animFrameId = requestAnimationFrame(render);
@@ -63,7 +67,7 @@ export const CustomCursor: React.FC = () => {
       document.removeEventListener('mouseenter', onMouseEnter);
       cancelAnimationFrame(animFrameId);
     };
-  }, [hovered]);
+  }, []);
 
   if (!visible) return null;
 

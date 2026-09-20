@@ -36,8 +36,11 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ onOpenModa
                 <span className="timeline-orb-pulse" />
               </div>
 
-              <div className="spotlight-card" style={{ padding: '32px' }}>
-                <div className="timeline-period-badge">{exp.period}</div>
+              <div className="spotlight-card timeline-card" style={{ padding: '32px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '10px' }}>
+                  <span className="timeline-period-badge">{exp.period}</span>
+                  <span className="timeline-exp-id">NODE // {exp.id.toUpperCase()}</span>
+                </div>
                 <h3 className="timeline-role">{exp.role}</h3>
                 <div className="timeline-company">{exp.company}</div>
                 <p style={{ color: 'var(--text-secondary)', marginBottom: '18px', fontSize: '0.96rem' }}>

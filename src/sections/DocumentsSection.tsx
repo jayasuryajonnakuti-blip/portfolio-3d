@@ -24,13 +24,15 @@ export const DocumentsSection: React.FC = () => {
           {documentsData.map((doc) => (
             <div
               key={doc.id}
-              className="doc-card spotlight-card"
-              style={doc.isPrimary ? { borderColor: 'rgba(255, 26, 26, 0.45)' } : {}}
+              className={`doc-card spotlight-card ${doc.isPrimary ? 'doc-card-primary' : ''}`}
             >
               <div>
-                <span className="section-tag" style={{ marginBottom: '14px', fontSize: '0.72rem' }}>
-                  {doc.badge}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '14px' }}>
+                  <span className="section-tag" style={{ margin: 0, fontSize: '0.72rem' }}>
+                    {doc.badge}
+                  </span>
+                  <span className="doc-format-tag">PDF DOCUMENT</span>
+                </div>
                 <h3 style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '10px' }}>
                   {doc.title}
                 </h3>

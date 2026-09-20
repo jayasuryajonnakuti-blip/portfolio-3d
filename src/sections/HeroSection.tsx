@@ -10,9 +10,23 @@ export const HeroSection: React.FC = () => {
       <div className="container hero-grid">
         {/* Left: Developer Identity with Dramatic Typography */}
         <div className="hero-content">
-          <div className="status-pill">
-            <span className="pulse-dot" />
-            <span>{profileData.status}</span>
+          {/* Engineering Telemetry Ribbon */}
+          <div className="hero-telemetry-ribbon">
+            <div className="telemetry-node">
+              <span className="telemetry-pip" />
+              <span className="telemetry-key">SYS</span>
+              <span className="telemetry-val">PORTFOLIO v2.4</span>
+            </div>
+            <span className="telemetry-divider">/</span>
+            <div className="telemetry-node">
+              <span className="telemetry-key">STATUS</span>
+              <span className="telemetry-val text-red">OPEN FOR ROLES</span>
+            </div>
+            <span className="telemetry-divider">/</span>
+            <div className="telemetry-node">
+              <span className="telemetry-key">FOCUS</span>
+              <span className="telemetry-val">JAVA • AI • FULL-STACK</span>
+            </div>
           </div>
 
           <h1 className="hero-title">
@@ -31,9 +45,9 @@ export const HeroSection: React.FC = () => {
 
           <div className="btn-group">
             <a href="#truthlens" className="btn btn-primary">
-              <Sparkles size={17} />
+              <Sparkles size={16} />
               <span>Explore TruthLens AI</span>
-              <ArrowUpRight size={17} />
+              <ArrowUpRight size={16} />
             </a>
             <a
               href={getAssetUrl(profileData.resumeUrl)}
@@ -41,7 +55,7 @@ export const HeroSection: React.FC = () => {
               rel="noopener noreferrer"
               className="btn btn-secondary"
             >
-              <FileText size={17} />
+              <FileText size={16} />
               <span>Download Official Resume</span>
             </a>
             <a
@@ -51,7 +65,7 @@ export const HeroSection: React.FC = () => {
               className="btn-icon"
               aria-label="GitHub Profile"
             >
-              <GithubIcon size={20} />
+              <GithubIcon size={19} />
             </a>
             <a
               href={profileData.linkedinUrl}
@@ -60,11 +74,11 @@ export const HeroSection: React.FC = () => {
               className="btn-icon"
               aria-label="LinkedIn Profile"
             >
-              <LinkedinIcon size={20} />
+              <LinkedinIcon size={19} />
             </a>
           </div>
 
-          {/* Academic & Professional Metas */}
+          {/* Academic & Professional Metas — Precision Readout Blocks */}
           <div className="hero-stats-row">
             <div className="hero-stat-item">
               <div className="hero-stat-val text-gradient-red">{profileData.cgpa}</div>

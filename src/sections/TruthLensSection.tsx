@@ -35,12 +35,22 @@ export const TruthLensSection: React.FC<TruthLensSectionProps> = ({ onOpenModal 
 
           {/* Telemetry Header */}
           <div className="forensic-telemetry-bar">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="telemetry-item">
               <span className="pulse-dot" />
-              <span>SYSTEM: ONLINE // GEMINI MULTIMODAL FORENSICS</span>
+              <span>SUBSYSTEM // GEMINI MULTIMODAL FORENSICS</span>
             </div>
-            <div>STATUS: LATENCY ~320ms // LOCAL HISTORY ENCRYPTED</div>
-            <div>TARGET ARCHITECTURE: REACT + TYPESCRIPT + GEMINI VISION</div>
+            <div className="telemetry-item">
+              <span className="telemetry-item-key">ENGINE LATENCY:</span>
+              <span className="telemetry-item-val">~320ms</span>
+            </div>
+            <div className="telemetry-item">
+              <span className="telemetry-item-key">LOCAL CACHE:</span>
+              <span className="telemetry-item-val">ENCRYPTED (LOCALSTORAGE)</span>
+            </div>
+            <div className="telemetry-item">
+              <span className="telemetry-item-key">STACK:</span>
+              <span className="telemetry-item-val">REACT • TS • GEMINI 1.5</span>
+            </div>
           </div>
 
           {/* Visual Storytelling: AI Analysis Pipeline */}

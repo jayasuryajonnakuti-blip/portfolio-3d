@@ -26,20 +26,31 @@ export const CertificatesSection: React.FC<CertificatesSectionProps> = ({ onOpen
         </div>
 
         <div className="certs-library-grid">
-          {certificateOrgsData.map((org) => (
-            <div key={org.id} className="cert-org-card spotlight-card">
-              <div className="cert-org-top">
-                <div className="cert-org-brand">
-                  <div className="org-icon-avatar">{org.shortCode}</div>
-                  <div>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>{org.name}</h3>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-                      {org.issuerSubtitle}
-                    </span>
+          {certificateOrgsData.map((org) => {
+            const isOracle = org.id === 'oracle';
+            return (
+              <div
+                key={org.id}
+                className={`cert-org-card spotlight-card ${isOracle ? 'cert-org-featured' : ''}`}
+              >
+                {isOracle && (
+                  <div className="cert-featured-banner">
+                    <ShieldCheck size={13} color="#FF1A1A" />
+                    <span>PREMIER CREDENTIAL // ORACLE UNIVERSITY</span>
                   </div>
+                )}
+                <div className="cert-org-top">
+                  <div className="cert-org-brand">
+                    <div className="org-icon-avatar">{org.shortCode}</div>
+                    <div>
+                      <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>{org.name}</h3>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
+                        {org.issuerSubtitle}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="cert-count-badge">{org.credentialsCount}</span>
                 </div>
-                <span className="cert-count-badge">{org.credentialsCount}</span>
-              </div>
 
               <div className="cert-items-stack">
                 {org.items.map((item) => (
@@ -94,8 +105,9 @@ export const CertificatesSection: React.FC<CertificatesSectionProps> = ({ onOpen
                 ))}
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
+      </div>
       </div>
     </section>
   );

@@ -17,10 +17,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onCopyEmail }) =
             <span>08 / CINEMATIC FINALE</span>
           </div>
 
-          <h2 className="section-title" style={{ fontSize: 'clamp(2.4rem, 5vw, 4.2rem)' }}>
+          <h2 className="section-title contact-title">
             LET'S BUILD
             <br />
-            <span className="text-gradient-red">SOMETHING GREAT.</span>
+            SOMETHING
+            <br />
+            <span className="text-gradient-red">SIGNIFICANT.</span>
           </h2>
 
           <p className="section-desc" style={{ maxWidth: '620px', marginInline: 'auto' }}>

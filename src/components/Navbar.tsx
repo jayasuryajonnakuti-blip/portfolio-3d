@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Menu, X } from 'lucide-react';
+import { FileText, Menu, X, ArrowUpRight } from 'lucide-react';
 import { getAssetUrl } from '../utils';
 
 interface NavbarProps {
@@ -7,14 +7,14 @@ interface NavbarProps {
 }
 
 const NAV_ITEMS = [
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'TruthLens AI', href: '#truthlens' },
-  { label: 'Certificates', href: '#certificates' },
-  { label: 'Documents', href: '#documents' },
-  { label: 'Contact', href: '#contact' },
+  { index: '01', label: 'About', href: '#about' },
+  { index: '02', label: 'Skills', href: '#skills' },
+  { index: '03', label: 'Experience', href: '#experience' },
+  { index: '04', label: 'Projects', href: '#projects' },
+  { index: '05', label: 'TruthLens AI', href: '#truthlens' },
+  { index: '06', label: 'Certificates', href: '#certificates' },
+  { index: '07', label: 'Documents', href: '#documents' },
+  { index: '08', label: 'Contact', href: '#contact' },
 ];
 
 export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
@@ -23,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 30);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -32,18 +32,21 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   return (
     <nav className={`navbar-fixed ${scrolled ? 'navbar-scrolled' : ''}`} aria-label="Main Navigation">
       <div className="container navbar-inner">
-        {/* Cinematic Monogram Brand */}
-        <a href="#home" className="nav-brand">
-          <div className="brand-monogram">JS</div>
-          <div>
+        {/* Architectural Monogram Brand & System Status */}
+        <a href="#home" className="nav-brand" aria-label="Back to top">
+          <div className="brand-monogram">
+            <span>JS</span>
+          </div>
+          <div className="brand-meta">
             <div className="brand-text">JAYA SURYA</div>
-            <div style={{ fontSize: '0.72rem', color: 'var(--red-bright)', fontFamily: 'var(--font-mono)' }}>
-              AI & FULL STACK
+            <div className="brand-status">
+              <span className="brand-status-dot" />
+              <span>SYS // ONLINE</span>
             </div>
           </div>
         </a>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links with Coordinates */}
         <ul className="nav-links-desktop">
           {NAV_ITEMS.map((item) => {
             const sectionId = item.href.replace('#', '');
@@ -54,24 +57,26 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
                   href={item.href}
                   className={`nav-link ${isActive ? 'active' : ''}`}
                 >
-                  {item.label}
+                  <span className="nav-item-index">{item.index}</span>
+                  <span className="nav-item-label">{item.label}</span>
+                  {isActive && <span className="nav-active-pip" />}
                 </a>
               </li>
             );
           })}
         </ul>
 
-        {/* Action Button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {/* Action Controls */}
+        <div className="nav-actions">
           <a
             href={getAssetUrl('assets/Surya_Reddy_Resume.pdf')}
             target="_blank"
             rel="noopener noreferrer"
             className="nav-cta-btn"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
-            <FileText size={14} />
+            <FileText size={13} />
             <span>Resume</span>
+            <ArrowUpRight size={12} className="nav-cta-arrow" />
           </a>
 
           {/* Mobile Menu Toggle Button */}
@@ -80,35 +85,38 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
             className="mobile-nav-toggle btn-icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle Navigation Menu"
+            aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div
-          style={{
-            background: 'rgba(5, 5, 5, 0.96)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255, 26, 26, 0.3)',
-            padding: '24px',
-          }}
-        >
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className="nav-link"
-                  onClick={() => setMobileMenuOpen(false)}
-                  style={{ fontSize: '1rem', display: 'block' }}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+        <div className="mobile-nav-drawer">
+          <div className="mobile-nav-header">
+            <span className="mobile-nav-tag">NAVIGATION SYSTEM</span>
+            <span className="mobile-nav-status">8 SECTORS ACTIVE</span>
+          </div>
+          <ul className="mobile-nav-list">
+            {NAV_ITEMS.map((item) => {
+              const sectionId = item.href.replace('#', '');
+              const isActive = activeSection === sectionId;
+              return (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className={`mobile-nav-link ${isActive ? 'active' : ''}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="nav-item-index">{item.index}</span>
+                    <span className="mobile-nav-link-title">{item.label}</span>
+                    {isActive && <span className="mobile-active-tag">CURRENT</span>}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

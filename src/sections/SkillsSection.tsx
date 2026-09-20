@@ -36,7 +36,7 @@ export const SkillsSection: React.FC = () => {
         </div>
 
         <div className="skills-categories-grid">
-          {skillCategoriesData.map((cat) => (
+          {skillCategoriesData.map((cat, idx) => (
             <div
               key={cat.id}
               className="skill-category-card spotlight-card"
@@ -44,8 +44,12 @@ export const SkillsSection: React.FC = () => {
             >
               <div className="category-header">
                 <div className="category-icon-box">{getIcon(cat.icon)}</div>
-                <div>
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800 }}>{cat.title}</h3>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                    <span className="category-code-tag">CAT // 0{idx + 1}</span>
+                    <span className="category-count-tag">{cat.skills.length} NODES</span>
+                  </div>
+                  <h3 style={{ fontSize: '1.18rem', fontWeight: 800, marginTop: '2px' }}>{cat.title}</h3>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
                     {cat.subtitle}
                   </span>
@@ -62,8 +66,9 @@ export const SkillsSection: React.FC = () => {
                     aria-label={`Explore official documentation and ecosystem for ${skill.name} (opens in a new tab)`}
                     title={`${skill.name} — ${skill.isOfficial ? 'Official Technology Ecosystem' : 'Authoritative Architecture Reference'}`}
                   >
-                    <span>{skill.name}</span>
-                    <ExternalLink size={12} className="skill-link-icon" aria-hidden="true" />
+                    <span className="skill-name-text">{skill.name}</span>
+                    <span className="skill-hub-indicator" aria-hidden="true">HUB</span>
+                    <ExternalLink size={11} className="skill-link-icon" aria-hidden="true" />
                   </a>
                 ))}
               </div>

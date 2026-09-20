@@ -42,80 +42,70 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = () => {
           </p>
         </div>
 
-        {/* Highlight Banner pointing to next section */}
-        <div
-          className="spotlight-card"
-          style={{
-            marginBottom: '36px',
-            border: '1px dashed rgba(255, 26, 26, 0.4)',
-            background: 'linear-gradient(90deg, rgba(229, 9, 20, 0.08) 0%, rgba(13, 13, 13, 0.8) 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-          }}
-        >
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--red-bright)', fontSize: '0.82rem', fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>
-              <Sparkles size={14} />
-              <span>HEADLINE MULTIMODAL SYSTEM</span>
+        {/* Flagship Portal Dispatch Bar */}
+        <div className="flagship-portal-bar spotlight-card">
+          <div className="portal-bar-left">
+            <div className="portal-tag">
+              <Sparkles size={13} color="#FF1A1A" />
+              <span>FLAGSHIP MULTIMODAL SYSTEM</span>
             </div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>
+            <h3 className="portal-title">
               TruthLens AI — Deepfake & Media Authentication
             </h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-              Jump to the dedicated forensic laboratory section below to explore the full Gemini API pipeline.
+            <p className="portal-desc">
+              Dedicated forensic laboratory section engineered with Google Gemini API multimodal vision pipelines below.
             </p>
           </div>
-          <a href="#truthlens" className="btn btn-primary" style={{ padding: '10px 20px', fontSize: '0.84rem' }}>
-            <span>Enter AI Forensics Lab</span>
-            <ArrowUpRight size={16} />
-          </a>
+          <div className="portal-bar-right">
+            <a href="#truthlens" className="btn btn-primary">
+              <span>Enter AI Forensics Lab</span>
+              <ArrowUpRight size={15} />
+            </a>
+          </div>
         </div>
 
         {/* Secondary Academic Projects — with 3D Tilt Hover */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-          {secondaryProjects.map((p) => (
+        <div className="secondary-projects-grid">
+          {secondaryProjects.map((p, pIdx) => (
             <article
               key={p.id}
               className="secondary-project-card spotlight-card project-tilt-card"
               onMouseMove={handleTilt}
               onMouseLeave={handleTiltReset}
-              style={{ transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow var(--transition-smooth)' }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
-                <div>
-                  <span className="section-tag" style={{ marginBottom: '8px', fontSize: '0.7rem', padding: '3px 10px' }}>
-                    {p.tag}
-                  </span>
-                  <h3 style={{ fontSize: '1.35rem', fontWeight: 800 }}>{p.title}</h3>
+              <div className="project-card-header">
+                <div className="project-meta-row">
+                  <span className="project-index-code">ARCH // 0{pIdx + 1}</span>
+                  <span className="project-status-tag">{p.tag}</span>
                 </div>
+                <h3 className="project-card-title">{p.title}</h3>
               </div>
 
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.94rem', lineHeight: 1.7, marginBottom: '22px' }}>
+              <p className="project-card-desc">
                 {p.description}
               </p>
 
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+              <div className="project-tech-stack">
                 {p.technologies.map((t) => (
-                  <span key={t} className="skill-item" style={{ fontSize: '0.78rem' }}>
+                  <span key={t} className="skill-item">
                     {t}
                   </span>
                 ))}
               </div>
 
               {p.githubUrl && (
-                <a
-                  href={p.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-secondary"
-                  style={{ padding: '8px 18px', fontSize: '0.84rem' }}
-                >
-                  <GithubIcon size={15} />
-                  <span>Inspect Source on GitHub</span>
-                </a>
+                <div className="project-card-footer">
+                  <a
+                    href={p.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-secondary project-github-btn"
+                  >
+                    <GithubIcon size={14} />
+                    <span>Inspect Repository</span>
+                    <ArrowUpRight size={13} />
+                  </a>
+                </div>
               )}
             </article>
           ))}
