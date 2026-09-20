@@ -66,8 +66,8 @@ interface SceneManagerProps {
   activeSection?: string;
 }
 
-export const SceneManager: React.FC<SceneManagerProps> = ({ scrollProgress }) => {
-  return <CanvasContainer scrollProgress={scrollProgress} />;
+export const SceneManager: React.FC<SceneManagerProps> = ({ scrollProgress, activeSection = 'home' }) => {
+  return <CanvasContainer scrollProgress={scrollProgress} activeSection={activeSection} />;
 };
 
 export default SceneManager;

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useScrollProgress, useSpotlightEffect } from './hooks';
+import { useScrollProgress, useSpotlightEffect, useScrollReveal } from './hooks';
 import { SceneManager } from './scenes';
 import { Navbar, Footer, CertModal, Toast, ModalData } from './components';
 import {
@@ -16,6 +16,7 @@ import {
 export function App() {
   const { progress, activeSection } = useScrollProgress();
   useSpotlightEffect();
+  useScrollReveal();
 
   const [modalData, setModalData] = useState<ModalData | null>(null);
   const [toastMessage, setToastMessage] = useState<string>('');
