@@ -6,3 +6,5 @@ export * from './Icons';
 export * from './CustomCursor';
 export * from './Prologue';
 export * from './FinalShot';
+export * from './ScrollProgressBar';
+

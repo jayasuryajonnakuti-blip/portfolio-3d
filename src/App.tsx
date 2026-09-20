@@ -10,6 +10,7 @@ import {
   CustomCursor,
   Prologue,
   FinalShot,
+  ScrollProgressBar,
 } from './components';
 import {
   HeroSection,
@@ -64,6 +65,9 @@ export function App() {
 
   return (
     <div className="portfolio-root">
+      {/* Cinematic Scroll Progress Bar — thin red strip at page top */}
+      <ScrollProgressBar progress={progress} />
+
       {/* Desktop Cinematic Custom Cursor */}
       <CustomCursor />
 

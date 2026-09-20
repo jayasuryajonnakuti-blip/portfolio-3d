@@ -10,6 +10,22 @@ interface ProjectsSectionProps {
 export const ProjectsSection: React.FC<ProjectsSectionProps> = () => {
   const secondaryProjects = projectsData.filter((p) => !p.featured);
 
+  /**
+   * Subtle 3D perspective tilt on mouse move — pure CSS transform, no libs.
+   * Works by reading pointer position relative to the card bounds.
+   */
+  const handleTilt = (e: React.MouseEvent<HTMLElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5 to 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg) translateY(-4px) scale(1.015)`;
+  };
+
+  const handleTiltReset = (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.transform = '';
+  };
+
   return (
     <section id="projects">
       <div className="container">
@@ -58,10 +74,16 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = () => {
           </a>
         </div>
 
-        {/* Secondary Academic Projects */}
+        {/* Secondary Academic Projects — with 3D Tilt Hover */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
           {secondaryProjects.map((p) => (
-            <article key={p.id} className="secondary-project-card spotlight-card">
+            <article
+              key={p.id}
+              className="secondary-project-card spotlight-card project-tilt-card"
+              onMouseMove={handleTilt}
+              onMouseLeave={handleTiltReset}
+              style={{ transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow var(--transition-smooth)' }}
+            >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
                 <div>
                   <span className="section-tag" style={{ marginBottom: '8px', fontSize: '0.7rem', padding: '3px 10px' }}>

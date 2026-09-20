@@ -31,7 +31,10 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ onOpenModa
 
           {experienceData.map((exp) => (
             <div key={exp.id} className="timeline-entry">
-              <div className="timeline-orb" />
+              {/* Pulsing Timeline Orb */}
+              <div className="timeline-orb">
+                <span className="timeline-orb-pulse" />
+              </div>
 
               <div className="spotlight-card" style={{ padding: '32px' }}>
                 <div className="timeline-period-badge">{exp.period}</div>
@@ -42,8 +45,8 @@ export const ExperienceSection: React.FC<ExperienceSectionProps> = ({ onOpenModa
                 </p>
 
                 <ul className="timeline-bullets">
-                  {exp.bullets.map((b, idx) => (
-                    <li key={idx}>{b}</li>
+                  {exp.bullets.map((b, bIdx) => (
+                    <li key={bIdx}>{b}</li>
                   ))}
                 </ul>
 

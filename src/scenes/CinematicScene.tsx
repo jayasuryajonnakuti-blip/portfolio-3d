@@ -61,8 +61,16 @@ export const CinematicScene: React.FC<CinematicSceneProps> = ({
     camTarget.current.lookAt.copy(stage.target);
   }, [activeSection]);
 
-  // 900 Red Embers & Ambient Dust Particles
-  const particleCount = 900;
+  // Adaptive particle count: 300 on mobile/low-end, 900 on desktop
+  const particleCount = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth < 768;
+      const isLowEnd = navigator.hardwareConcurrency != null && navigator.hardwareConcurrency <= 4;
+      return isMobile || isLowEnd ? 300 : 900;
+    }
+    return 900;
+  }, []);
+
   const [positions, colors, velocities] = useMemo(() => {
     const pos = new Float32Array(particleCount * 3);
     const cols = new Float32Array(particleCount * 3);
