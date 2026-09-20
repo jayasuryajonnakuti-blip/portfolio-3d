@@ -8,21 +8,10 @@ import {
   Toast,
   ModalData,
   CustomCursor,
-  Prologue,
-  FinalShot,
   ScrollProgressBar,
+  ScrollToTop,
 } from './components';
-import {
-  HeroSection,
-  AboutSection,
-  SkillsSection,
-  ExperienceSection,
-  ProjectsSection,
-  TruthLensSection,
-  CertificatesSection,
-  DocumentsSection,
-  ContactSection,
-} from './sections';
+import { AppRoutes } from './routes/AppRoutes';
 
 export function App() {
   const { progress, activeSection } = useScrollProgress();
@@ -56,15 +45,11 @@ export function App() {
       });
   }, []);
 
-  const handleEnterWorld = useCallback(() => {
-    const heroEl = document.getElementById('home');
-    if (heroEl) {
-      heroEl.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, []);
-
   return (
     <div className="portfolio-root">
+      {/* Scroll restoration upon page transitions */}
+      <ScrollToTop />
+
       {/* Cinematic Scroll Progress Bar — thin red strip at page top */}
       <ScrollProgressBar progress={progress} />
 
@@ -80,41 +65,10 @@ export function App() {
 
       {/* Main Interactive Portfolio Content */}
       <div className="content-wrapper">
-        <Navbar activeSection={activeSection} />
+        <Navbar />
 
-        <main>
-          {/* Chapter 01 — Prologue */}
-          <Prologue onEnterWorld={handleEnterWorld} />
-
-          {/* Chapter 02 — Hero */}
-          <HeroSection />
-
-          {/* Chapter 03 — About */}
-          <AboutSection />
-
-          {/* Chapter 04 — Skills */}
-          <SkillsSection />
-
-          {/* Chapter 05 — Experience & Education */}
-          <ExperienceSection onOpenModal={handleOpenModal} />
-
-          {/* Chapter 06 — Project Universe */}
-          <ProjectsSection onOpenModal={handleOpenModal} />
-
-          {/* Chapter 07 — TruthLens AI (Main Showcase) */}
-          <TruthLensSection onOpenModal={handleOpenModal} />
-
-          {/* Chapter 08 — Certificates Vault */}
-          <CertificatesSection onOpenModal={handleOpenModal} />
-
-          {/* Chapter 09 — Documents */}
-          <DocumentsSection />
-
-          {/* Chapter 10 — Contact */}
-          <ContactSection onCopyEmail={handleCopyEmail} />
-
-          {/* Final Shot — Cinematic Pull-Back */}
-          <FinalShot />
+        <main className="main-content-stream">
+          <AppRoutes onOpenModal={handleOpenModal} onCopyEmail={handleCopyEmail} />
         </main>
 
         <Footer />

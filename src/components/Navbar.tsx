@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Menu, X } from 'lucide-react';
+import { NavLink, Link } from 'react-router-dom';
+import { FileText, Menu, X, Sparkles } from 'lucide-react';
 import { getAssetUrl } from '../utils';
 
-interface NavbarProps {
-  activeSection: string;
-}
-
 const NAV_ITEMS = [
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'TruthLens AI', href: '#truthlens' },
-  { label: 'Certificates', href: '#certificates' },
-  { label: 'Documents', href: '#documents' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Instrument', path: '/' },
+  { label: 'Work', path: '/work' },
+  { label: 'TruthLens AI', path: '/work/truthlens', isHighlight: true },
+  { label: 'About & Vault', path: '/about' },
+  { label: 'Resume', path: '/resume' },
+  { label: 'Contact', path: '/contact' },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
+export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -32,47 +27,42 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   return (
     <nav className={`navbar-fixed ${scrolled ? 'navbar-scrolled' : ''}`} aria-label="Main Navigation">
       <div className="container navbar-inner">
-        {/* Cinematic Monogram Brand */}
-        <a href="#home" className="nav-brand">
+        {/* Brand Monogram */}
+        <Link to="/" className="nav-brand" onClick={() => setMobileMenuOpen(false)}>
           <div className="brand-monogram">JS</div>
           <div>
             <div className="brand-text">JAYA SURYA</div>
-            <div style={{ fontSize: '0.72rem', color: 'var(--red-bright)', fontFamily: 'var(--font-mono)' }}>
-              AI & FULL STACK
-            </div>
+            <div className="brand-subtext">FORENSIC INSTRUMENT</div>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop Navigation Links */}
         <ul className="nav-links-desktop">
-          {NAV_ITEMS.map((item) => {
-            const sectionId = item.href.replace('#', '');
-            const isActive = activeSection === sectionId;
-            return (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className={`nav-link ${isActive ? 'active' : ''}`}
-                >
-                  {item.label}
-                </a>
-              </li>
-            );
-          })}
+          {NAV_ITEMS.map((item) => (
+            <li key={item.path}>
+              <NavLink
+                to={item.path}
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? 'active' : ''} ${item.isHighlight ? 'nav-link-flagship' : ''}`
+                }
+              >
+                {item.isHighlight && <Sparkles size={11} style={{ marginRight: '4px' }} />}
+                <span>{item.label}</span>
+              </NavLink>
+            </li>
+          ))}
         </ul>
 
         {/* Action Button */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <a
-            href={getAssetUrl('assets/Surya_Reddy_Resume.pdf')}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/resume"
             className="nav-cta-btn"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
             <FileText size={14} />
-            <span>Resume</span>
-          </a>
+            <span>CV / Resume</span>
+          </Link>
 
           {/* Mobile Menu Toggle Button */}
           <button
@@ -88,27 +78,35 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div
-          style={{
-            background: 'rgba(5, 5, 5, 0.96)',
-            backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(255, 26, 26, 0.3)',
-            padding: '24px',
-          }}
-        >
+        <div className="mobile-menu-dropdown">
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className="nav-link"
+              <li key={item.path}>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `nav-link ${isActive ? 'active' : ''} ${item.isHighlight ? 'text-signal' : ''}`
+                  }
                   onClick={() => setMobileMenuOpen(false)}
-                  style={{ fontSize: '1rem', display: 'block' }}
+                  style={{ fontSize: '1.05rem', display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
-                  {item.label}
-                </a>
+                  {item.isHighlight && <Sparkles size={14} />}
+                  <span>{item.label}</span>
+                </NavLink>
               </li>
             ))}
+            <li style={{ paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
+              <a
+                href={getAssetUrl('assets/Surya_Reddy_Resume.pdf')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-signal btn-sm"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                <FileText size={14} />
+                <span>Download Official Resume PDF</span>
+              </a>
+            </li>
           </ul>
         </div>
       )}
