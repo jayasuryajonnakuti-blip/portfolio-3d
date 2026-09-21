@@ -30,6 +30,9 @@ export const CinematicScene: React.FC<CinematicSceneProps> = ({
 
   // Mesh & Particle Refs
   const embersRef = useRef<THREE.Points>(null);
+  const starsRef = useRef<THREE.Points>(null);
+  const nebulaRef = useRef<THREE.Points>(null);
+  const asteroidsRef = useRef<THREE.Group>(null);
   const coreRef = useRef<THREE.Mesh>(null);
   const innerGlowRef = useRef<THREE.Mesh>(null);
   const outerRingRef = useRef<THREE.Group>(null);
@@ -105,6 +108,81 @@ export const CinematicScene: React.FC<CinematicSceneProps> = ({
     return [pos, cols, vels];
   }, []);
 
+  // ── High-Fidelity Starfield Generation ──
+  const [starPositions, starSizes, starColors] = useMemo(() => {
+    const count = 1500;
+    const pos = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
+    const cols = new Float32Array(count * 3);
+    
+    const colorA = new THREE.Color('#FFFFFF');
+    const colorB = new THREE.Color('#FFDDDD');
+    const colorC = new THREE.Color('#DDEEFF');
+
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+      // Spherical distribution at a far distance
+      const r = 20 + Math.random() * 20;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      
+      pos[i3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i3 + 2] = r * Math.cos(phi);
+
+      sizes[i] = Math.random() * 1.5 + 0.5;
+
+      const rand = Math.random();
+      const col = rand < 0.8 ? colorA : rand < 0.9 ? colorB : colorC;
+      cols[i3] = col.r;
+      cols[i3 + 1] = col.g;
+      cols[i3 + 2] = col.b;
+    }
+    return [pos, sizes, cols];
+  }, []);
+
+  // ── High-Fidelity Nebula Particles ──
+  const [nebulaPositions, nebulaColors] = useMemo(() => {
+    const count = 400;
+    const pos = new Float32Array(count * 3);
+    const cols = new Float32Array(count * 3);
+    const colors = ['#2200ff', '#ff00aa', '#5500ff', '#00aaff'];
+
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+      const r = 15 + Math.random() * 15;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      
+      pos[i3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i3 + 2] = r * Math.cos(phi);
+
+      const color = new THREE.Color(colors[Math.floor(Math.random() * colors.length)]);
+      cols[i3] = color.r;
+      cols[i3 + 1] = color.g;
+      cols[i3 + 2] = color.b;
+    }
+    return [pos, cols];
+  }, []);
+
+  // ── Asteroid Belt Generation ──
+  const asteroidData = useMemo(() => {
+    const count = 200;
+    const data = [];
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 6 + Math.random() * 2;
+      const x = Math.cos(angle) * radius;
+      const z = Math.sin(angle) * radius;
+      const y = (Math.random() - 0.5) * 0.8;
+      const scale = Math.random() * 0.08 + 0.02;
+      const rotationSpeed = Math.random() * 0.02;
+      data.push({ position: [x, y, z], scale, rotationSpeed });
+    }
+    return data;
+  }, []);
+
   const emberGeoRef = useRef<THREE.BufferGeometry>(null);
 
 // Reusable vectors to prevent GC allocations on every frame
@@ -116,37 +194,41 @@ const tempVecLookAt = new THREE.Vector3();
     if (typeof document !== 'undefined' && document.hidden) return;
 
     const t = state.clock.elapsedTime;
-    const lerpFactor = 1 - Math.pow(0.012, delta);
+    const lerpFactor = 1 - Math.pow(0.008, delta); // Smoother lerp
 
-    // ── 1. Camera Inertial Interpolation + Parallax (Zero-Allocation) ──
+    // ── 1. Camera Inertial Interpolation + Dynamic Parallax ──
+    const zOffset = Math.sin(t * 0.4) * 0.15; // Subtle breathing on Z axis
+    
     tempVecTarget.copy(camTarget.current.pos);
-    tempVecTarget.x += mouse.current.x * 0.38;
-    tempVecTarget.y += mouse.current.y * 0.28;
-    camera.position.lerp(tempVecTarget, lerpFactor * 0.6);
+    tempVecTarget.z += zOffset;
+    tempVecTarget.x += mouse.current.x * 0.42;
+    tempVecTarget.y += mouse.current.y * 0.32;
+    camera.position.lerp(tempVecTarget, lerpFactor * 0.5);
 
     tempVecLookAt.copy(camTarget.current.lookAt);
-    tempVecLookAt.x += mouse.current.x * 0.16;
-    tempVecLookAt.y += mouse.current.y * 0.12;
+    tempVecLookAt.x += mouse.current.x * 0.22;
+    tempVecLookAt.y += mouse.current.y * 0.18;
     camera.lookAt(tempVecLookAt);
 
-    // ── 2. Red Point Light follows mouse cursor ──
+    // ── 2. Red Point Light follows mouse with a 'lagging' physics feel ──
     if (lightRef.current) {
-      lightRef.current.position.x = mouse.current.x * 4.5;
-      lightRef.current.position.y = mouse.current.y * 3.5;
+      const lightLerp = 1 - Math.pow(0.05, delta);
+      lightRef.current.position.x = THREE.MathUtils.lerp(lightRef.current.position.x, mouse.current.x * 5, lightLerp);
+      lightRef.current.position.y = THREE.MathUtils.lerp(lightRef.current.position.y, mouse.current.y * 4, lightLerp);
+      lightRef.current.intensity = 2.0 + Math.sin(t * 1.5) * 0.3; // Flickering core light
     }
 
-    // ── 3. Rising Ember Physics (Fast Direct Buffer Mutation) ──
+    // ── 3. Advanced Neural Ember Physics ──
     if (emberGeoRef.current) {
       const posAttr = emberGeoRef.current.attributes.position as THREE.BufferAttribute;
       const arr = posAttr.array as Float32Array;
       for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
-        arr[i3 + 1] += velocities[i3 + 1];
-        arr[i3] += Math.sin(t * 0.9 + i) * 0.0035;
+        arr[i3 + 1] += velocities[i3 + 1] * (1 + Math.sin(t * 0.5 + i) * 0.2);
+        arr[i3] += Math.sin(t * 0.7 + i * 0.5) * 0.005;
+        arr[i3 + 2] += Math.cos(t * 0.7 + i * 0.5) * 0.005;
 
-        if (arr[i3 + 1] > 9) {
-          arr[i3 + 1] = -9;
-        }
+        if (arr[i3 + 1] > 10) arr[i3 + 1] = -10;
       }
       posAttr.needsUpdate = true;
     }
@@ -159,16 +241,38 @@ const tempVecLookAt = new THREE.Vector3();
       }
     }
 
-    // ── 4. Central Neural Polyhedron ──
+    // ── 3.5 Starfield Twinkle & Rotation ──
+    if (starsRef.current) {
+      starsRef.current.rotation.y += delta * 0.005;
+      starsRef.current.rotation.x += delta * 0.002;
+    }
+
+    if (nebulaRef.current) {
+      nebulaRef.current.rotation.y -= delta * 0.003;
+    }
+
+    if (asteroidsRef.current) {
+      asteroidsRef.current.rotation.y += delta * 0.1;
+    }
+
+    // ── 4. Central Space Sun ──
     if (coreRef.current) {
       coreRef.current.rotation.x += delta * 0.16;
       coreRef.current.rotation.y += delta * 0.24;
       coreRef.current.position.y = Math.sin(t * 0.7) * 0.22 - scrollProgress * 1.6;
+      
+      // Intelligent Pulsing (Neural Beat)
+      const pulse = Math.sin(t * 2.5) * 0.5 + 0.5;
+      const mat = coreRef.current.material as THREE.MeshStandardMaterial;
+      mat.opacity = 0.2 + pulse * 0.15;
+      mat.emissiveIntensity = pulse * 0.5;
     }
 
     if (innerGlowRef.current) {
-      const scale = 1 + Math.sin(t * 2.2) * 0.1;
+      const scale = 1 + Math.sin(t * 2.2) * 0.15;
       innerGlowRef.current.scale.set(scale, scale, scale);
+      const mat = innerGlowRef.current.material as THREE.MeshBasicMaterial;
+      mat.opacity = 0.15 + Math.sin(t * 4) * 0.1;
     }
 
     // ── 5. Orbital Laser Rings ──
@@ -216,6 +320,52 @@ const tempVecLookAt = new THREE.Vector3();
       <directionalLight position={[-9, -10, -6]} intensity={0.65} color="#7A0000" />
       <pointLight ref={lightRef} position={[0, 0, 3]} intensity={2.0} color="#FF1A1A" distance={14} />
 
+      {/* ── High-Fidelity Distant Starfield ── */}
+      <points ref={starsRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[starPositions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[starColors, 3]} />
+          <bufferAttribute attach="attributes-size" args={[starSizes, 1]} />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.06}
+          vertexColors
+          transparent
+          opacity={0.8}
+          sizeAttenuation={true}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </points>
+
+      {/* ── Cinematic Nebula Cloud ── */}
+      <points ref={nebulaRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[nebulaPositions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[nebulaColors, 3]} />
+        </bufferGeometry>
+        <pointsMaterial
+          size={2.5}
+          vertexColors
+          transparent
+          opacity={0.15}
+          sizeAttenuation={true}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          map={new THREE.TextureLoader().load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/lensflare/lensflare0.png')}
+        />
+      </points>
+
+      {/* ── Asteroid Belt ── */}
+      <group ref={asteroidsRef} position={[2.4, 0, -1]} rotation={[Math.PI * 0.15, 0, 0]}>
+        {asteroidData.map((data, i) => (
+          <mesh key={i} position={data.position as any} scale={data.scale}>
+            <dodecahedronGeometry args={[1, 0]} />
+            <meshStandardMaterial color="#443322" roughness={1} metalness={0} />
+          </mesh>
+        ))}
+      </group>
+
       {/* ── 900 Cinematic Red Embers & Dust Field ── */}
       <points ref={embersRef}>
         <bufferGeometry ref={emberGeoRef}>
@@ -235,16 +385,15 @@ const tempVecLookAt = new THREE.Vector3();
 
       {/* ── Central Neural Polyhedron & Core ── */}
       <group position={[2.4, 0, -1]}>
-        {/* Outer Wireframe */}
+        {/* Realistic High-Intensity Sun */}
         <mesh ref={coreRef}>
-          <icosahedronGeometry args={[1.35, 1]} />
+          <sphereGeometry args={[1.5, 32, 32]} />
           <meshStandardMaterial
-            color="#FF1A1A"
-            wireframe
-            transparent
-            opacity={0.3}
-            roughness={0.1}
-            metalness={0.9}
+            color="#FFA500"
+            emissive="#FF4500"
+            emissiveIntensity={2}
+            roughness={0}
+            metalness={1}
           />
         </mesh>
 

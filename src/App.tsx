@@ -1,7 +1,9 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import Lenis from 'lenis';
 import { useScrollProgress, useSpotlightEffect, useScrollReveal } from './hooks';
 import { SceneManager } from './scenes';
 import {
+  AIChatbot,
   Navbar,
   Footer,
   CertModal,
@@ -10,6 +12,7 @@ import {
   CustomCursor,
   FinalShot,
   ScrollProgressBar,
+  LoadingScreen,
 } from './components';
 import {
   HeroSection,
@@ -25,8 +28,60 @@ import {
 
 export function App() {
   const { activeSection } = useScrollProgress();
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const loadingInterval = useRef<any>(null);
+  
   useSpotlightEffect();
   useScrollReveal();
+
+  useEffect(() => {
+    // Simulated smooth progress for "Master Portfolio" feel
+    loadingInterval.current = setInterval(() => {
+      setLoadingProgress(prev => {
+        if (prev >= 95) {
+          if (loadingInterval.current) clearInterval(loadingInterval.current);
+          return 95;
+        }
+        const step = prev < 30 ? 2 : prev < 70 ? 1 : 0.5;
+        return prev + step;
+      });
+    }, 40);
+
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 1.2,
+      lerp: 0.08,
+    });
+
+    lenis.on('scroll', () => {
+      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
+        ScrollTrigger.update();
+      });
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+      if (loadingInterval.current) clearInterval(loadingInterval.current);
+    };
+  }, []);
+
+  // Handle actual load completion
+  const onSceneLoaded = useCallback(() => {
+    setLoadingProgress(100);
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 500);
+  }, []);
 
   const [modalData, setModalData] = useState<ModalData | null>(null);
   const [toastMessage, setToastMessage] = useState<string>('');
@@ -57,6 +112,8 @@ export function App() {
 
   return (
     <div className="portfolio-root">
+      <LoadingScreen progress={loadingProgress} isLoaded={isLoaded} />
+
       {/* Cinematic Scroll Progress Bar — updates directly on scroll */}
       <ScrollProgressBar />
 
@@ -68,10 +125,18 @@ export function App() {
       <div className="film-grain-overlay" aria-hidden="true" />
 
       {/* 3D WebGL Background Canvas Layer */}
-      <SceneManager activeSection={activeSection} scrollProgress={0} />
+      <SceneManager 
+        activeSection={activeSection} 
+        scrollProgress={0} 
+        onLoadingProgress={(p) => {
+          // Merge real progress with simulated if real is higher
+          setLoadingProgress(prev => Math.max(prev, p));
+        }}
+        onLoaded={onSceneLoaded}
+      />
 
       {/* Main Interactive Portfolio Content */}
-      <div className="content-wrapper">
+      <div className="content-wrapper" style={{ opacity: isLoaded ? 1 : 0, transition: 'opacity 1.5s ease-in-out' }}>
         <Navbar activeSection={activeSection} />
 
         <main>
@@ -112,6 +177,9 @@ export function App() {
       {/* Modal & Toast Overlays */}
       <CertModal modalData={modalData} onClose={handleCloseModal} />
       <Toast message={toastMessage} show={showToast} />
+      
+      {/* AI Assistant Layer */}
+      <AIChatbot />
     </div>
   );
 }

@@ -85,10 +85,24 @@ export const SCENE_STAGES: Record<string, SceneStage> = {
 interface SceneManagerProps {
   scrollProgress: number;
   activeSection?: string;
+  onLoadingProgress?: (progress: number) => void;
+  onLoaded?: () => void;
 }
 
-export const SceneManager: React.FC<SceneManagerProps> = ({ scrollProgress, activeSection = 'home' }) => {
-  return <CanvasContainer scrollProgress={scrollProgress} activeSection={activeSection} />;
+export const SceneManager: React.FC<SceneManagerProps> = ({ 
+  scrollProgress, 
+  activeSection = 'home',
+  onLoadingProgress,
+  onLoaded
+}) => {
+  return (
+    <CanvasContainer 
+      scrollProgress={scrollProgress} 
+      activeSection={activeSection} 
+      onLoadingProgress={onLoadingProgress}
+      onLoaded={onLoaded}
+    />
+  );
 };
 
 export default SceneManager;

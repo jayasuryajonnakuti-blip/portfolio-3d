@@ -2,21 +2,7 @@ import React from 'react';
 import { ArrowRight, ArrowUpRight, Mail, FileText } from 'lucide-react';
 import { profileData } from '../data';
 import { getAssetUrl } from '../utils';
-import { GithubIcon, LinkedinIcon } from '../components';
-
-/* ─── Tech orbit data ─────────────────────────────────────────────────── */
-const orbitTechs = [
-  { name: 'Python',     color: '#3572A5', bg: '#1a2a3a', angle: 45,  orbit: 1, symbol: 'Py' },
-  { name: 'React',      color: '#61DAFB', bg: '#0d1f2d', angle: 90,  orbit: 1, symbol: '⚛' },
-  { name: 'Node.js',    color: '#68A063', bg: '#0d1a0d', angle: 135, orbit: 1, symbol: 'N' },
-  { name: 'MongoDB',    color: '#4DB33D', bg: '#0d1a0d', angle: 225, orbit: 1, symbol: '🍃' },
-  { name: 'GitHub',     color: '#FFFFFF', bg: '#1a1a1a', angle: 300, orbit: 1, symbol: '⎇' },
-  { name: 'HTML',       color: '#E34F26', bg: '#2a1006', angle: 160, orbit: 2, symbol: '5' },
-  { name: 'Java',       color: '#F89820', bg: '#2a1a00', angle: 200, orbit: 2, symbol: '☕' },
-  { name: 'TypeScript', color: '#3178C6', bg: '#0d1a2a', angle: 250, orbit: 2, symbol: 'TS' },
-  { name: 'AWS',        color: '#FF9900', bg: '#2a1800', angle: 320, orbit: 2, symbol: '⚡' },
-  { name: 'Docker',     color: '#2496ED', bg: '#0a1a2a', angle: 10,  orbit: 2, symbol: '🐳' },
-];
+import { GithubIcon, LinkedinIcon, SolarSkillsOrbit } from '../components';
 
 const skillCategories = [
   {
@@ -112,56 +98,7 @@ export const SkillsSection: React.FC = () => {
 
         {/* Center: Orbital Visualization */}
         <div className="skills-orbit-center">
-          {/* Telemetry side text */}
-          <div className="orbit-telemetry-side" aria-hidden="true">
-            <span>LEARN</span><span>BUILD</span><span>CREATE</span><span>IMPACT</span>
-          </div>
-
-          {/* Orbit rings */}
-          <div className="orbit-ring orbit-ring-1" aria-hidden="true" />
-          <div className="orbit-ring orbit-ring-2" aria-hidden="true" />
-
-          {/* Central sphere with glowing fiery planetary core */}
-          <div className="orbit-core-sphere">
-            <img
-              src={getAssetUrl('assets/skills-center-orbit.jpg')}
-              alt="Skills Planetary Core"
-              className="skills-orbit-center-img"
-              aria-hidden="true"
-            />
-            <div className="orbit-core-inner">
-              <div className="orbit-core-title">SKILLS</div>
-              <div className="orbit-core-sub">// POWERING IDEAS</div>
-            </div>
-            <div className="orbit-core-glow" />
-          </div>
-
-          {/* Tech nodes */}
-          {orbitTechs.map((tech) => {
-            const radius = tech.orbit === 1 ? 150 : 220;
-            const rad = (tech.angle * Math.PI) / 180;
-            const x = Math.cos(rad) * radius;
-            const y = Math.sin(rad) * radius * 0.42; // ellipse compression
-            return (
-              <div
-                key={tech.name}
-                className="orbit-tech-node"
-                style={{
-                  transform: `translate(calc(50% + ${x}px - 28px), calc(50% + ${y}px - 28px))`,
-                  background: tech.bg,
-                  borderColor: tech.color + '55',
-                }}
-                title={tech.name}
-              >
-                <span className="orbit-node-symbol" style={{ color: tech.color }}>
-                  {tech.symbol}
-                </span>
-                <span className="orbit-node-label" style={{ color: tech.color }}>
-                  {tech.name}
-                </span>
-              </div>
-            );
-          })}
+          <SolarSkillsOrbit />
         </div>
 
         {/* Right: Skills Overview Sidebar */}

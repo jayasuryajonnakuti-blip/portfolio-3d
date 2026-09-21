@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,28 +8,6 @@ export function useScrollReveal() {
   useEffect(() => {
     // Respect user's motion preferences
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Initialize Lenis smooth scroll
-    let lenis: Lenis | null = null;
-    if (!prefersReducedMotion) {
-      lenis = new Lenis({
-        duration: 1.25,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1.0,
-      });
-
-      lenis.on('scroll', ScrollTrigger.update);
-
-      const tickerCallback = (time: number) => {
-        lenis?.raf(time * 1000);
-      };
-
-      gsap.ticker.add(tickerCallback);
-      gsap.ticker.lagSmoothing(500, 33);
-    }
 
     const ctx = gsap.context(() => {
       if (prefersReducedMotion) return;
@@ -155,7 +132,6 @@ export function useScrollReveal() {
     });
 
     return () => {
-      lenis?.destroy();
       ctx.revert();
     };
   }, []);

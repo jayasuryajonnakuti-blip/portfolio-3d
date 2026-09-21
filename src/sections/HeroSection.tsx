@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import {
   ArrowRight,
   ArrowUpRight,
   Play,
   Plus,
-  Brain,
-  Code,
-  Layers,
-  Award,
-  GraduationCap,
   Mail,
   FileText,
   Globe,
@@ -18,36 +14,22 @@ import { getAssetUrl } from '../utils';
 import { GithubIcon, LinkedinIcon } from '../components';
 
 export const HeroSection: React.FC = () => {
-  // Support both Slide 1 (Cyborg / Hello World) and Slide 2 (Cosmic Explorer / Human + AI)
-  const [activeSlide, setActiveSlide] = useState<1 | 2>(1);
+  const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const x = (clientX - window.innerWidth / 2) / 50;
+      const y = (clientY - window.innerHeight / 2) / 50;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   return (
     <section id="home" className="hero-reference-section">
-      {/* ====================================================================
-          SLIDE TOGGLE CONTROLLER (HUD SWITCHER)
-          ==================================================================== */}
-      <div className="container hero-slide-controls-wrap">
-        <div className="hero-slide-switcher">
-          <span className="slide-switcher-label">HUD SLIDE:</span>
-          <button
-            type="button"
-            className={`hud-slide-tab ${activeSlide === 1 ? 'active' : ''}`}
-            onClick={() => setActiveSlide(1)}
-          >
-            <span className="tab-indicator" />
-            <span>01 // HELLO WORLD</span>
-          </button>
-          <button
-            type="button"
-            className={`hud-slide-tab ${activeSlide === 2 ? 'active' : ''}`}
-            onClick={() => setActiveSlide(2)}
-          >
-            <span className="tab-indicator" />
-            <span>02 // COSMIC EXPLORER</span>
-          </button>
-        </div>
-      </div>
-
       {/* ====================================================================
           ZONE 1: ASYMMETRIC MONUMENTAL HERO GRID (MATCHING REFERENCE EXACT)
           ==================================================================== */}
@@ -57,9 +39,7 @@ export const HeroSection: React.FC = () => {
           <div className="hero-identity-col">
             <div className="hero-greeting-tag">
               <span className="hud-code-prefix">//</span>
-              <span className="hud-code-text">
-                {activeSlide === 1 ? 'HELLO, WORLD!' : 'HUMAN + AI + CREATIVITY'}
-              </span>
+              <span className="hud-code-text">HELLO, WORLD!</span>
             </div>
 
             <h1 className="hero-monumental-heading">
@@ -83,26 +63,19 @@ export const HeroSection: React.FC = () => {
                 <ArrowRight size={15} className="btn-arrow-icon" />
               </a>
 
-              {activeSlide === 1 ? (
-                <a href="#truthlens" className="hud-btn-secondary">
-                  <Play size={13} className="play-triangle-icon" />
-                  <span>WATCH SHOWREEL</span>
-                </a>
-              ) : (
-                <a href="#truthlens" className="hud-btn-secondary">
-                  <Play size={13} className="play-triangle-icon" />
-                  <span>VIEW TRUTHLENS AI</span>
-                </a>
-              )}
+              <a href="#truthlens" className="hud-btn-secondary">
+                <Play size={13} className="play-triangle-icon" />
+                <span>WATCH SHOWREEL</span>
+              </a>
             </div>
 
             {/* Precision Vertical Scroll Indicator */}
             <div className="hero-scroll-indicator">
-              <div className="scroll-laser-track">
-                <div className="scroll-laser-pulse" />
-              </div>
+              <span className="scroll-guide-label">SCROLL TO EXPLORE</span>
               <div className="scroll-guide-wrap">
-                <span className="scroll-guide-label">SCROLL TO EXPLORE</span>
+                <div className="scroll-laser-track">
+                  <div className="scroll-laser-pulse" />
+                </div>
                 <div className="scroll-target-reticle">
                   <span className="scroll-reticle-pip" />
                 </div>
@@ -112,62 +85,56 @@ export const HeroSection: React.FC = () => {
 
           {/* Center Column: Spatial 3D Graphic with Floating Badges */}
           <div className="hero-spatial-center">
-            <div className="cosmic-core-preview-wrapper" aria-hidden="true">
+            <motion.div 
+              className="cosmic-core-preview-wrapper" 
+              aria-hidden="true"
+              animate={{
+                y: [mousePos.y, mousePos.y - 20, mousePos.y],
+                x: mousePos.x,
+              }}
+              transition={{
+                y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+                x: { type: "spring", stiffness: 50, damping: 20 }
+              }}
+            >
               <img
-                src={
-                  activeSlide === 1
-                    ? getAssetUrl('assets/hero-center-cyborg.jpg')
-                    : getAssetUrl('assets/hero-center-cosmic.jpg')
-                }
-                alt={activeSlide === 1 ? 'Cyborg AI Core' : 'Cosmic Explorer Core'}
+                src={getAssetUrl('assets/hero-center-cyborg.jpg')}
+                alt="Cyborg AI Core"
                 className="cosmic-core-img"
               />
               <div className="cosmic-core-glow-ring" />
-            </div>
-
-            {/* Floating Telemetry Labels for Slide 2 */}
-            {activeSlide === 2 && (
-              <>
-                <div className="spatial-telemetry-side left" aria-hidden="true">
-                  <span>BUILD</span>
-                  <span>LEARN</span>
-                  <span>CREATE</span>
-                  <span>IMPACT</span>
-                </div>
-
-                <div className="spatial-telemetry-side right" aria-hidden="true">
-                  <span>IDEAS</span>
-                  <span>INTO</span>
-                  <span>REALITY</span>
-                </div>
-              </>
-            )}
+            </motion.div>
 
             {/* Floating HUD Callout Badges */}
-            <div className="spatial-floating-badge badge-top-left">
+            <motion.div 
+              className="spatial-floating-badge badge-top-left"
+              animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
               <span className="badge-text">CREATIVE THINKER</span>
               <Plus size={11} className="badge-plus-icon" />
-            </div>
+            </motion.div>
 
-            <div className="spatial-floating-badge badge-top-right">
+            <motion.div 
+              className="spatial-floating-badge badge-top-right"
+              animate={{ y: [0, 12, 0], x: [0, -8, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            >
               <Plus size={11} className="badge-plus-icon" />
               <span className="badge-text">PROBLEM SOLVER</span>
-            </div>
+            </motion.div>
 
-            {activeSlide === 2 && (
-              <div className="spatial-floating-badge badge-mid-right">
-                <Plus size={11} className="badge-plus-icon" />
-                <span className="badge-text">AI BUILDER</span>
-              </div>
-            )}
-
-            <div className="spatial-floating-badge badge-bottom-right">
+            <motion.div 
+              className="spatial-floating-badge badge-bottom-right"
+              animate={{ y: [0, -15, 0], x: [0, -5, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            >
               <Plus size={11} className="badge-plus-icon" />
               <span className="badge-text">CONTINUOUS LEARNER</span>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Right Column: Numeric Stats (Slide 1) OR Readout Nodes (Slide 2) */}
+          {/* Right Column: Numeric Stats */}
           <div className="hero-stats-hud-col">
             {/* Quote Banner */}
             <div className="hero-quote-box">
@@ -179,91 +146,31 @@ export const HeroSection: React.FC = () => {
               <div className="hero-quote-author">— JAYA SURYA</div>
             </div>
 
-            {activeSlide === 1 ? (
-              /* Numeric Stats for Slide 1 */
-              <div className="hero-numeric-stats">
-                <div className="hero-stat-row">
-                  <div className="stat-big-number">
-                    100<span className="stat-plus">+</span>
-                  </div>
-                  <div className="stat-label">HOURS OF LEARNING</div>
+            {/* Numeric Stats */}
+            <div className="hero-numeric-stats">
+              <div className="hero-stat-row">
+                <div className="stat-big-number">
+                  100<span className="stat-plus">+</span>
                 </div>
-                <div className="hero-stat-row">
-                  <div className="stat-big-number">
-                    10<span className="stat-plus">+</span>
-                  </div>
-                  <div className="stat-label">TECHNOLOGIES</div>
-                </div>
-                <div className="hero-stat-row">
-                  <div className="stat-big-number">
-                    3<span className="stat-plus">+</span>
-                  </div>
-                  <div className="stat-label">MAJOR PROJECTS</div>
-                </div>
-                <div className="hero-stat-row">
-                  <div className="stat-big-number">∞</div>
-                  <div className="stat-label">BIGGER DREAMS</div>
-                </div>
+                <div className="stat-label">HOURS OF LEARNING</div>
               </div>
-            ) : (
-              /* Readout Stack for Slide 2 */
-              <div className="hero-readout-stack">
-                <div className="hero-readout-node">
-                  <div className="readout-icon-box">
-                    <Brain size={18} className="readout-hud-icon" />
-                  </div>
-                  <div className="readout-text-box">
-                    <div className="readout-primary-val">AI & DATA SCIENCE</div>
-                    <div className="readout-secondary-tag">FOCUS AREA</div>
-                  </div>
+              <div className="hero-stat-row">
+                <div className="stat-big-number">
+                  10<span className="stat-plus">+</span>
                 </div>
-
-                <div className="hero-readout-node">
-                  <div className="readout-icon-box">
-                    <Code size={18} className="readout-hud-icon" />
-                  </div>
-                  <div className="readout-text-box">
-                    <div className="readout-primary-val">FULL STACK</div>
-                    <div className="readout-secondary-tag">DEVELOPMENT</div>
-                  </div>
-                </div>
-
-                <div className="hero-readout-node">
-                  <div className="readout-icon-box">
-                    <Layers size={18} className="readout-hud-icon" />
-                  </div>
-                  <div className="readout-text-box">
-                    <div className="readout-primary-val">TRUTHLENS AI</div>
-                    <div className="readout-secondary-tag">FLAGSHIP PROJECT</div>
-                  </div>
-                </div>
-
-                <div className="hero-readout-node">
-                  <div className="readout-icon-box">
-                    <Award size={18} className="readout-hud-icon" />
-                  </div>
-                  <div className="readout-text-box">
-                    <div className="readout-primary-val">ORACLE CERTIFIED</div>
-                    <div className="readout-secondary-tag">PROFESSIONAL</div>
-                  </div>
-                </div>
-
-                <div className="hero-readout-node">
-                  <div className="readout-icon-box">
-                    <GraduationCap size={18} className="readout-hud-icon" />
-                  </div>
-                  <div className="readout-text-box">
-                    <div className="readout-primary-val">B.TECH</div>
-                    <div className="readout-secondary-tag">AI & DATA SCIENCE</div>
-                  </div>
-                </div>
-
-                <div className="hero-readout-footnote">
-                  <span className="footnote-label">DRIVEN BY</span>
-                  <span className="footnote-highlight">BIGGER DREAMS</span>
-                </div>
+                <div className="stat-label">TECHNOLOGIES</div>
               </div>
-            )}
+              <div className="hero-stat-row">
+                <div className="stat-big-number">
+                  3<span className="stat-plus">+</span>
+                </div>
+                <div className="stat-label">MAJOR PROJECTS</div>
+              </div>
+              <div className="hero-stat-row">
+                <div className="stat-big-number">∞</div>
+                <div className="stat-label">BIGGER DREAMS</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -400,7 +307,7 @@ export const HeroSection: React.FC = () => {
           <div className="continuation-inner-content">
             {/* Top Motto Row */}
             <div className="continuation-top-motto">
-              <span>{activeSlide === 1 ? 'FROM INDIA' : 'FROM IDEAS TODAY'}</span>
+              <span>FROM INDIA</span>
               <span className="motto-arrow">➔</span>
               <span>TO A MORE INTELLIGENT TOMORROW</span>
             </div>

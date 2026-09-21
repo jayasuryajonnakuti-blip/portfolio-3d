@@ -1,0 +1,8 @@
+{
+  "name": "Portfolio 3D Orbit",
+  "description": "A high-fidelity 3D portfolio featuring a reactive solar system of skills, Gemini-powered chat, and Lyria music generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

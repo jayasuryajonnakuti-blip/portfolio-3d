@@ -7,9 +7,11 @@ interface ToastProps {
 }
 
 export const Toast: React.FC<ToastProps> = ({ message, show }) => {
+  if (!show) return null;
+
   return (
-    <div className={`toast-message ${show ? 'show' : ''}`} role="status">
-      <CheckCircle2 size={18} color="#38bdf8" />
+    <div className="toast-container" role="status">
+      <CheckCircle2 size={18} color="#FF1A1A" />
       <span>{message}</span>
     </div>
   );

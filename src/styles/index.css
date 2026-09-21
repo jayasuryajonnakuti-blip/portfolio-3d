@@ -306,8 +306,320 @@ section {
 }
 
 /* ==========================================================================
-   NAVBAR & FLOATING SYSTEM CONTROLS
+   AI COMPONENTS & INTERACTIVE HUD ELEMENTS
    ========================================================================== */
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--red-dark);
+  border-radius: var(--radius-full);
+}
+
+@keyframes radarPulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(2.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+@keyframes rotateGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* 3D Orbit Specifics */
+.solar-orbit-container {
+  position: relative;
+  width: 100%;
+  height: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(circle at center, rgba(255, 26, 26, 0.03) 0%, transparent 70%);
+}
+
+.solar-orbit-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1px 1px at 10% 10%, #fff, transparent),
+    radial-gradient(1px 1px at 20% 50%, #fff, transparent),
+    radial-gradient(2px 2px at 40% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 60% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 80% 90%, #fff, transparent),
+    radial-gradient(2px 2px at 90% 40%, #fff, transparent);
+  background-size: 400px 400px;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.solar-core {
+  position: relative;
+  z-index: 10;
+}
+/* Realistic Space Sun Classes */
+.solar-sun-space {
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle at center, #FFFFFF 0%, #FFF9C4 10%, #FFD600 30%, #FF6D00 60%, #D50000 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+  box-shadow: 0 0 100px rgba(255, 100, 0, 0.9), 0 0 200px rgba(255, 60, 0, 0.4), inset 0 0 40px rgba(0, 0, 0, 0.4);
+}
+
+.sun-plasma-layer {
+  position: absolute;
+  inset: -30px;
+  background: radial-gradient(circle at center, rgba(255, 165, 0, 0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(20px);
+  animation: plasmaPulse 3s ease-in-out infinite;
+}
+
+.sun-corona-layer {
+  position: absolute;
+  inset: -60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(255, 40, 0, 0.3) 0%, transparent 80%);
+  filter: blur(40px);
+  animation: coronaPulse 5s ease-in-out infinite;
+}
+
+.sun-surface-texture {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+@keyframes plasmaPulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.15); opacity: 0.6; }
+}
+
+@keyframes coronaPulse {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  50% { transform: scale(1.3); opacity: 0.35; }
+}
+
+.solar-sun-space::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(255, 100, 0, 0.3);
+  animation: rotateGlow 15s linear infinite;
+}
+
+/* ── Orbit HUD Styles ── */
+.orbit-hud-left {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  max-width: 400px;
+  z-index: 20;
+}
+
+.hud-chapter {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--red-bright);
+  letter-spacing: 0.2em;
+  margin-bottom: 20px;
+}
+
+.hud-main-title {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.hud-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.15em;
+  margin-bottom: 15px;
+  opacity: 0.8;
+}
+
+.hud-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  opacity: 0.7;
+  margin-bottom: 40px;
+}
+
+.hud-quote {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--text-muted);
+  border-left: 2px solid var(--red-primary);
+  padding-left: 20px;
+  max-width: 300px;
+  opacity: 0.6;
+}
+
+.orbit-hud-right {
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  z-index: 20;
+}
+
+.hud-overview-panel {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 26, 26, 0.4);
+  padding: 30px;
+  border-radius: 4px;
+  width: 200px;
+  backdrop-filter: blur(10px);
+}
+
+.hud-panel-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--red-bright);
+  letter-spacing: 0.1em;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.hud-stat-item {
+  margin-bottom: 25px;
+}
+
+.hud-stat-item:last-child {
+  margin-bottom: 0;
+}
+
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #FFF;
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+.orbit-hud-footer {
+  position: absolute;
+  bottom: 5%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 20;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.footer-dot {
+  width: 4px;
+  height: 4px;
+  background: var(--red-primary);
+  border-radius: 50%;
+}
+
+.skill-planet-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.skill-logo-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  filter: blur(10px);
+}
+
+.skill-planet-optimized:hover .skill-planet-circle {
+  transform: scale(1.25);
+  border-width: 3px;
+}
+
+.skill-planet-name {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 12px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.skill-planet-optimized:hover .skill-planet-name {
+  transform: translateY(2px);
+  background: rgba(255, 26, 26, 0.2);
+  border-color: rgba(255, 26, 26, 0.4);
+}
+
+.orbit-telemetry-decor {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.telemetry-item {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--red-bright);
+  letter-spacing: 0.15em;
+  opacity: 0.6;
+}
+
 /* ==========================================================================
    HUD PRECISION REGISTRATION MARKS & ANGULAR BRACKETS
    ========================================================================== */
@@ -397,19 +709,19 @@ section {
 }
 
 .hud-brand-badge {
-  width: 34px;
-  height: 34px;
-  background: rgba(255, 26, 26, 0.12);
-  border: 1px solid rgba(255, 32, 40, 0.6);
+  width: 38px;
+  height: 38px;
+  background: #B00000;
+  border: 1px solid #FF1A1A;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
   font-weight: 800;
-  font-size: 0.9rem;
-  color: #FF2B2B;
-  box-shadow: 0 0 15px rgba(255, 26, 26, 0.35);
+  font-size: 1rem;
+  color: #FFFFFF;
+  box-shadow: 0 0 20px rgba(255, 26, 26, 0.4);
   transition: all 0.2s ease;
 }
 
@@ -722,10 +1034,22 @@ section {
   box-shadow: 0 0 8px #FF3333;
 }
 
+.hero-reference-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.15;
+}
+
 .hero-main-container {
   max-width: 1320px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
 }
 
 .hero-asymmetric-grid {
@@ -878,22 +1202,31 @@ section {
 /* Scroll Guide Indicator */
 .hero-scroll-indicator {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   color: #71717A;
+  margin-top: 20px;
+}
+
+.scroll-guide-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
 }
 
 .scroll-laser-track {
-  width: 2px;
-  height: 28px;
-  background: rgba(255, 26, 26, 0.2);
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 26, 26, 0.3);
   position: relative;
   overflow: hidden;
-  border-radius: 2px;
 }
 
 .scroll-laser-pulse {
@@ -2958,6 +3291,67 @@ section {
   overflow-y: auto;
   box-shadow: 0 0 80px rgba(255, 26, 26, 0.35);
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.cert-modal-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(10, 10, 12, 0.6);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.cert-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.cert-modal-close:hover {
+  color: #FF1A1A;
+  background: rgba(255, 26, 26, 0.1);
+  transform: rotate(90deg);
+}
+
+.cert-modal-body {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #020202;
+  min-height: 400px;
+}
+
+.cert-modal-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.cert-modal-footer {
+  padding: 20px 24px;
+  border-top: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background: rgba(10, 10, 12, 0.6);
 }
 
 .toast-container {
@@ -3260,3 +3654,167 @@ section {
 }
 
 
+
+/* ─── Solar Skills Orbit ─────────────────────────────────────────── */
+.solar-orbit-container {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  overflow: hidden;
+  margin: 40px 0;
+}
+
+.solar-sun {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #FF1A1A 0%, #7A0000 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  position: relative;
+  border: 1px solid rgba(255, 26, 26, 0.4);
+}
+
+.solar-sun-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.solar-sun-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: #FFF;
+}
+
+.solar-sun-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.05em;
+}
+
+.skill-planet-orbit-wrapper {
+  transform-origin: center center;
+}
+
+.skill-planet-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  pointer-events: auto;
+  text-decoration: none;
+}
+
+.skill-planet-circle {
+  width: 48px;
+  height: 48px;
+  background: #050505;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+  z-index: 20;
+}
+
+.skill-planet-node:hover .skill-planet-circle {
+  transform: scale(1.15);
+  background: #111;
+}
+
+.skill-planet-symbol {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.skill-planet-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.skill-planet-node:hover .skill-planet-name {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.orbit-telemetry-decor {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.telemetry-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.1em;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .solar-orbit-container {
+    height: 400px;
+    transform: scale(0.6);
+  }
+}
+
+/* ─── Solar Skills Orbit Polish ───────────────────────────────────── */
+.solar-orbit-ring {
+  background: radial-gradient(circle, transparent 70%, rgba(255, 26, 26, 0.03) 100%);
+  transition: border-color 0.4s ease;
+}
+
+.solar-orbit-container:hover .solar-orbit-ring {
+  border-color: rgba(255, 26, 26, 0.2);
+}
+
+.solar-sun {
+  box-shadow: 0 0 50px rgba(255, 26, 26, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.5);
+  animation: sun-pulse 6s infinite ease-in-out;
+}
+
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.2); }
+}
+
+.skill-planet-circle {
+  border-width: 2px;
+  backdrop-filter: blur(4px);
+}
+
+.skill-planet-node:hover .skill-planet-circle {
+  box-shadow: 0 0 30px currentColor;
+  background: rgba(20, 20, 20, 0.9);
+}
+
+.solar-orbit-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}

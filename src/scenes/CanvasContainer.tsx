@@ -1,16 +1,45 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { PerspectiveCamera } from '@react-three/drei';
+import { PerspectiveCamera, useProgress } from '@react-three/drei';
 import { CinematicScene } from './CinematicScene';
 
 interface CanvasContainerProps {
   scrollProgress: number;
   activeSection: string;
+  onLoadingProgress?: (progress: number) => void;
+  onLoaded?: () => void;
 }
+
+const ProgressHandler: React.FC<{
+  onLoadingProgress?: (progress: number) => void;
+  onLoaded?: () => void;
+}> = ({ onLoadingProgress, onLoaded }) => {
+  const { progress, active } = useProgress();
+
+  useEffect(() => {
+    if (onLoadingProgress) {
+      onLoadingProgress(progress);
+    }
+  }, [progress, onLoadingProgress]);
+
+  useEffect(() => {
+    // If there are no assets (active is false) or progress is 100, we are loaded
+    if (!active || progress >= 100) {
+      const timer = setTimeout(() => {
+        if (onLoaded) onLoaded();
+      }, 800); // Small buffer for the simulated bar to look good
+      return () => clearTimeout(timer);
+    }
+  }, [progress, active, onLoaded]);
+
+  return null;
+};
 
 export const CanvasContainer: React.FC<CanvasContainerProps> = ({
   scrollProgress,
   activeSection,
+  onLoadingProgress,
+  onLoaded,
 }) => {
   return (
     <div className="canvas-bg-wrapper" aria-hidden="true">
@@ -18,7 +47,7 @@ export const CanvasContainer: React.FC<CanvasContainerProps> = ({
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={[1, 1.5]}
       >
-        {/* Camera is now controlled by lerp inside CinematicScene via useThree */}
+        <ProgressHandler onLoadingProgress={onLoadingProgress} onLoaded={onLoaded} />
         <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
         <ambientLight intensity={0.45} />
         <directionalLight position={[10, 10, 5]}  intensity={0.85} color="#FFFFFF" />

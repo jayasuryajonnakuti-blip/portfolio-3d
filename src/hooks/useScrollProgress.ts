@@ -22,8 +22,14 @@ const SECTION_IDS = [
 export function useScrollProgress(): { activeSection: string } {
   const [activeSection, setActiveSection] = useState<string>('home');
   const activeSectionRef = useRef<string>('home');
+  const elementsRef = useRef<Record<string, HTMLElement | null>>({});
 
   useEffect(() => {
+    // Cache elements on mount
+    SECTION_IDS.forEach(id => {
+      elementsRef.current[id] = document.getElementById(id);
+    });
+
     let ticking = false;
 
     const handleScroll = () => {
@@ -33,25 +39,24 @@ export function useScrollProgress(): { activeSection: string } {
           const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
           const progress = maxScroll > 0 ? Math.min(Math.max(currentY / maxScroll, 0), 1) : 0;
 
-          // Update CSS variable directly without triggering React re-renders!
           document.documentElement.style.setProperty('--scroll-progress', `${progress}`);
 
-          // Detect active section
+          // Detect active section using cached elements
           let currentSection = 'home';
-          const scrollPosWithOffset = currentY + 220;
+          const scrollPosWithOffset = currentY + 300;
 
           for (const id of SECTION_IDS) {
-            const el = document.getElementById(id);
+            const el = elementsRef.current[id];
             if (el) {
               const top = el.offsetTop;
               const height = el.offsetHeight;
               if (scrollPosWithOffset >= top && scrollPosWithOffset < top + height) {
                 currentSection = id;
+                break; // Found it, stop searching
               }
             }
           }
 
-          // ONLY trigger React re-render when the active section genuinely changes!
           if (activeSectionRef.current !== currentSection) {
             activeSectionRef.current = currentSection;
             setActiveSection(currentSection);

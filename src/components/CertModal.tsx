@@ -27,8 +27,8 @@ export const CertModal: React.FC<CertModalProps> = ({ modalData, onClose }) => {
   if (!modalData) return null;
 
   return (
-    <div className="cert-modal open" onClick={onClose} role="dialog" aria-modal="true">
-      <div className="cert-modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="modal-content-card" onClick={(e) => e.stopPropagation()}>
         <div className="cert-modal-header">
           <div>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>{modalData.title}</h3>

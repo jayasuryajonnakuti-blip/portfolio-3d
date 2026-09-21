@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "ChatSession": {
+      "title": "Chat Session",
+      "description": "Represents a multi-turn conversation with the Gemini AI.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the user who owns this session." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the session was created." },
+        "lastMessageAt": { "type": "string", "format": "date-time", "description": "Timestamp of the last message in the session." },
+        "title": { "type": "string", "description": "A short summary title of the conversation." }
+      },
+      "required": ["userId", "createdAt", "lastMessageAt"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "A single message within a chat session.",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string", "description": "The ID of the parent chat session." },
+        "role": { "type": "string", "enum": ["user", "model"], "description": "The role of the message sender." },
+        "content": { "type": "string", "description": "The text content of the message." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the message was sent." }
+      },
+      "required": ["sessionId", "role", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/chatSessions/{sessionId}": {
+      "schema": "ChatSession",
+      "description": "Root collection for user chat sessions."
+    },
+    "/chatSessions/{sessionId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Sub-collection for messages within a session."
+    }
+  }
+}
